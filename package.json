@@ -17,6 +17,8 @@
     "eslint-config-semistandard": "^16.0.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-vue": "^9.7.0",
+    "sass": "^1.62.0",
+    "sass-loader": "^13.2.2",
     "semistandard": "^16.0.1",
     "terser": "^5.14.2",
     "vite": "^3.0.2"
