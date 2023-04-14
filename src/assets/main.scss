@@ -1,0 +1,65 @@
+@import './variables.scss';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: $main-font;
+  background: var(--color-background);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+}
+
+#app, .el-container {
+  min-height: 100vh;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+.el-header {
+  padding: 0;
+}
+
+.el-input {
+  input {
+    background-color: $secondary-bg;
+  }
+}
+
+.el-main {
+  display: flex;
+}
+
+.el-button--primary {
+  width: 100%;
+  background-color: $main-font;
+  border-color: $main-font;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.el-button--primary:hover {
+  background-color: $hover;
+  border-color: $hover;
+}
+
+.el-input__inner:focus {
+  border-color: $main-font;
+}
