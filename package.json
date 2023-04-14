@@ -13,6 +13,7 @@
   "devDependencies": {
     "@vitejs/plugin-legacy": "^2.0.0",
     "@vitejs/plugin-vue2": "^1.1.2",
+    "element-ui": "^2.15.13",
     "eslint": "^8.27.0",
     "eslint-config-semistandard": "^16.0.0",
     "eslint-config-standard": "^17.0.0",
