@@ -1,49 +1,28 @@
-<script setup>
-import HelloWorld from './comps/HelloWorld.vue'
-import TheWelcome from './comps/TheWelcome.vue'
-</script>
-
 <template>
   <div id="app">
-    <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-      <div class="wrapper">
-        <HelloWorld msg="You did it!" />
-      </div>
-    </header>
-
-    <main>
-      <TheWelcome />
-    </main>
+    <el-container>
+      <el-header>
+        <header-comp></header-comp>
+      </el-header>
+      <el-main>
+        <registration-view></registration-view>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
+<script>
+import HeaderComp from './comps/HeaderComp.vue';
+import RegistrationView from './views/RegistrationView.vue';
+
+export default {
+  components: {
+    RegistrationView,
+    HeaderComp
+  }
+};
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
