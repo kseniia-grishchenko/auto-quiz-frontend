@@ -48,11 +48,25 @@ a,
   display: flex;
 }
 
-.el-button--primary {
+.el-button {
   width: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.el-button--default {
+  background-color: $secondary-bg;
+  border-color: $secondary-bg;
+}
+
+.el-button--default:hover {
+  background-color: $hover-secondary;
+  border-color: $hover-secondary;
+  color: initial;
+}
+
+.el-button--primary {
   background-color: $main-font;
   border-color: $main-font;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .el-button--primary:hover {
