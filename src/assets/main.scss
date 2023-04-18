@@ -21,27 +21,8 @@ body {
   min-height: 100vh;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
 .el-header {
   padding: 0;
-}
-
-.el-input {
-  input {
-    background-color: $secondary-bg;
-  }
 }
 
 .el-main {
@@ -64,16 +45,7 @@ a,
   color: initial;
 }
 
-.el-button--primary {
-  background-color: $main-font;
-  border-color: $main-font;
-}
-
 .el-button--primary:hover {
   background-color: $hover;
   border-color: $hover;
-}
-
-.el-input__inner:focus {
-  border-color: $main-font;
 }
