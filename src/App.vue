@@ -5,7 +5,7 @@
         <header-comp></header-comp>
       </el-header>
       <el-main>
-        <registration-view></registration-view>
+        <sign-up></sign-up>
       </el-main>
     </el-container>
   </div>
@@ -13,11 +13,11 @@
 
 <script>
 import HeaderComp from './comps/HeaderComp.vue';
-import RegistrationView from './views/RegistrationView.vue';
+import SignUp from './views/SignUp.vue';
 
 export default {
   components: {
-    RegistrationView,
+    SignUp,
     HeaderComp
   }
 };

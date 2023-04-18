@@ -88,12 +88,15 @@ export default {
         this.$notify({
           title: 'Успіх',
           message: 'Акаунт успішно створено',
-          type: 'success'
+          type: 'success',
+          showClose: false
         });
+        location.hash = '/login';
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
-          message: JSON.stringify(err.response.data)
+          message: JSON.stringify(err.response.data),
+          showClose: false
         });
       }
     }
