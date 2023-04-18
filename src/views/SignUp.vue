@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     hashHandler () {
-      this.active = Boolean(location.hash.match('sign-up$'));
+      this.active = !!location.hash.match('sign-up$');
     },
 
     async onSubmit () {
