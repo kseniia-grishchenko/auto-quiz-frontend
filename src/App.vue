@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <el-container>
-      <el-aside width="200px" v-if="showAside">Aside</el-aside>
+      <el-aside v-if="showAside">
+        <nav-menu></nav-menu>
+      </el-aside>
       <el-container>
         <el-header>
           <header-comp></header-comp>
@@ -19,6 +21,7 @@
 import jwtDecode from 'jwt-decode';
 import { get, post } from './api.js';
 
+import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
@@ -107,6 +110,7 @@ export default {
     clearInterval(this.refresher);
   },
   components: {
+    NavMenu,
     HeaderComp,
     SignUp,
     SignIn
