@@ -1,5 +1,5 @@
 <template>
-  <el-row class="content">
+  <el-row class="content" v-if="active">
     <el-col :span="10">
       <el-form ref="form" :model="form" class="input-section" :rules="rules">
         <h3>Зареєструйтесь, щоб продовжити</h3>
@@ -50,6 +50,7 @@ import { postUnauthorized } from '../api.js';
 export default {
   data () {
     return {
+      active: false,
       form: {
         email: '',
         firstName: '',
@@ -76,6 +77,10 @@ export default {
     };
   },
   methods: {
+    hashHandler () {
+      this.active = Boolean(location.hash.match('sign-up$'));
+    },
+
     async onSubmit () {
       try {
         await postUnauthorized('/api/account/register/', {
@@ -100,6 +105,13 @@ export default {
         });
       }
     }
+  },
+  mounted () {
+    window.addEventListener('hashchange', this.hashHandler);
+    this.hashHandler();
+  },
+  beforeDestroy () {
+    window.removeEventListener('hashchange', this.hashHandler);
   }
 };
 </script>
