@@ -96,7 +96,7 @@ export default {
           type: 'success',
           showClose: false
         });
-        location.hash = '/login';
+        location.hash = '/sign-in';
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
