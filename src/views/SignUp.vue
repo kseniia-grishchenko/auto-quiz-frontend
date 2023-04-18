@@ -36,7 +36,10 @@
           <el-button type="primary" class="action" @click="onSubmit">Зареєструватись</el-button>
         </el-form-item>
       </el-form>
-      <div>Вже зареєстровані? Увійти</div>
+      <div>
+        <span>Вже зареєстровані?</span>
+        <el-link type="primary" href="#/sign-in">Увійти</el-link>
+      </div>
     </el-col>
     <el-col :span="12" :offset="2">
       <img src="/assets/icons/registration.png">
@@ -96,7 +99,7 @@ export default {
           type: 'success',
           showClose: false
         });
-        location.hash = '/sign-in';
+        location.hash = '#/sign-in';
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -165,7 +168,9 @@ h3 {
   }
 
   ~ div {
-    text-align: center;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
     margin-top: 24px
   }
 
