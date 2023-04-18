@@ -84,10 +84,13 @@ export default {
   created () {
     this.logIn();
 
-    setInterval(() => {
+    this.refresher = setInterval(() => {
       if (this.expiresAt && this.expiresAt * 1e3 > Date.now()) return;
       this.refreshToken();
     }, 60 * 1e3);
+  },
+  beforeDestroy () {
+    clearInterval(this.refresher);
   },
   components: {
     HeaderComp,
