@@ -25,13 +25,13 @@ import SignIn from './views/SignIn.vue';
 
 export default {
   data: () => ({
+    hash: '',
     expiresAt: null,
-    user: null,
-    type: 'password'
+    user: null
   }),
   computed: {
     showAside () {
-
+      return !this.hash.match(/sign-up|sign-in/);
     }
   },
   methods: {
@@ -96,6 +96,12 @@ export default {
       if (this.expiresAt && this.expiresAt * 1e3 > Date.now()) return;
       this.refreshToken();
     }, 60 * 1e3);
+
+    const hashChangeHandler = () => {
+      this.hash = location.hash;
+    };
+    window.addEventListener('hashchange', hashChangeHandler);
+    hashChangeHandler();
   },
   beforeDestroy () {
     clearInterval(this.refresher);
