@@ -1,13 +1,16 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>
-        <header-comp></header-comp>
-      </el-header>
-      <el-main>
-        <sign-up v-if="!user"></sign-up>
-        <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
-      </el-main>
+      <el-aside width="200px" v-if="showAside">Aside</el-aside>
+      <el-container>
+        <el-header>
+          <header-comp></header-comp>
+        </el-header>
+        <el-main>
+          <sign-up v-if="!user"></sign-up>
+          <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -26,6 +29,11 @@ export default {
     user: null,
     type: 'password'
   }),
+  computed: {
+    showAside () {
+
+    }
+  },
   methods: {
     async logIn () {
       const accessToken = localStorage.getItem('access');
