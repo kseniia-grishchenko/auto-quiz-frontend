@@ -178,7 +178,6 @@ h3 {
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
-    color: $main-font;
     display: inline-block;
     margin-bottom: 8px;
   }
