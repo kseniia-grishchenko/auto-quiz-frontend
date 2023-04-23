@@ -11,6 +11,7 @@
         <el-main>
           <sign-up v-if="!user"></sign-up>
           <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
+          <subject-list v-if="user"></subject-list>
         </el-main>
       </el-container>
     </el-container>
@@ -25,6 +26,7 @@ import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
+import SubjectList from './views/SubjectList.vue';
 
 export default {
   data: () => ({
@@ -113,7 +115,8 @@ export default {
     NavMenu,
     HeaderComp,
     SignUp,
-    SignIn
+    SignIn,
+    SubjectList
   }
 };
 </script>
