@@ -43,13 +43,14 @@
         v-if="subjectActive"
         :subject="subjectActive"
         @edit-subject-name="editSubjectName"
+        @delete-subject="deleteSubject"
       ></subject-info-card>
     </el-dialog>
   </el-row>
 </template>
 
 <script>
-import { get, post, put } from '../api.js';
+import { get, post, put, deleteRequest } from '../api.js';
 import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
 
 export default {
@@ -77,6 +78,20 @@ export default {
           name
         });
         this.subjectActive = subjectActive;
+        this.needToRefresh = true;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
+    },
+
+    async deleteSubject (id) {
+      try {
+        await deleteRequest(`/api/subjects/${id}/`);
+        this.subjectActive = null;
         this.needToRefresh = true;
       } catch (err) {
         this.$notify.error({

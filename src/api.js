@@ -48,10 +48,22 @@ const put = async (uri, payload = {}) => {
     .then((response) => response);
 };
 
+const deleteRequest = async (uri) => {
+  return axios.delete(uri,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response);
+};
+
 export {
   get,
   getUnautorized,
   post,
   postUnauthorized,
-  put
+  put,
+  deleteRequest
 };

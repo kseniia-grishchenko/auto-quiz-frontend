@@ -15,6 +15,10 @@
         <i class="el-icon-copy-document" @click="copyToken"></i>
       </div>
     </div>
+    <el-button
+      type="danger"
+      @click="$emit('delete-subject', subject.id)"
+    >Видалити предмет</el-button>
     <el-alert
       ref="alertEl"
       :style="{display: 'none'}"
@@ -95,6 +99,10 @@ export default {
       padding-left: 0;
       width: auto;
     }
+
+    button {
+      margin-top: 30px;
+    }
   }
 
 </style>
@@ -102,7 +110,7 @@ export default {
   .info-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 
     > div {
       display: grid;
