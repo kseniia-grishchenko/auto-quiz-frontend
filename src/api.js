@@ -37,9 +37,21 @@ const post = async (uri, payload = {}) => {
     .then((response) => response);
 };
 
+const put = async (uri, payload = {}) => {
+  return axios.put(uri,
+    payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response);
+};
+
 export {
   get,
   getUnautorized,
   post,
-  postUnauthorized
+  postUnauthorized,
+  put
 };
