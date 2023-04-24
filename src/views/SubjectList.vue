@@ -50,7 +50,12 @@
 </template>
 
 <script>
-import { get, post, put, deleteRequest } from '../api.js';
+import {
+  getRequest,
+  postRequest,
+  putRequest,
+  deleteRequest
+} from '../api.js';
 import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
 
 export default {
@@ -74,7 +79,7 @@ export default {
   methods: {
     async editSubjectName ({ id, name }) {
       try {
-        const { data: subjectActive } = await put(`/api/subjects/${id}/`, {
+        const { data: subjectActive } = await putRequest(`/api/subjects/${id}/`, {
           name
         });
         this.subjectActive = subjectActive;
@@ -114,7 +119,7 @@ export default {
 
     async fetchSubjects () {
       try {
-        const { data: subjects } = await get('/api/subjects');
+        const { data: subjects } = await getRequest('/api/subjects');
         this.subjects = subjects;
       } catch (err) {
         this.$notify.error({
@@ -127,7 +132,7 @@ export default {
 
     async onSubmit () {
       try {
-        await post('/api/subjects/', {
+        await postRequest('/api/subjects/', {
           name: this.form.name
         });
         this.fetchSubjects();

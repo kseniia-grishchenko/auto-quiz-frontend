@@ -66,7 +66,12 @@
 </template>
 
 <script>
-import { get, post, patch, deleteRequest } from '../api.js';
+import {
+  getRequest,
+  postRequest,
+  patchRequest,
+  deleteRequest
+} from '../api.js';
 import CourseInfoCard from '../comps/CourseInfoCard.vue';
 
 export default {
@@ -98,7 +103,7 @@ export default {
   methods: {
     async editCourseName ({ id, name }) {
       try {
-        const { data: courseActive } = await patch(`/api/courses/${id}/`, {
+        const { data: courseActive } = await patchRequest(`/api/courses/${id}/`, {
           name
         });
         this.courseActive = courseActive;
@@ -138,7 +143,7 @@ export default {
 
     async fetchCourses () {
       try {
-        const { data: courses } = await get('/api/courses');
+        const { data: courses } = await getRequest('/api/courses');
         this.courses = courses;
       } catch (err) {
         this.$notify.error({
@@ -151,7 +156,7 @@ export default {
 
     async fetchSubjects () {
       try {
-        const { data: subjects } = await get('/api/subjects');
+        const { data: subjects } = await getRequest('/api/subjects');
         this.subjects = subjects;
       } catch (err) {
         this.$notify.error({
@@ -164,7 +169,7 @@ export default {
 
     async onSubmit () {
       try {
-        await post('/api/courses/', {
+        await postRequest('/api/courses/', {
           editCourseName: this.form.name,
           subject: this.form.subject
         });

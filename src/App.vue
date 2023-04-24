@@ -21,7 +21,10 @@
 
 <script>
 import jwtDecode from 'jwt-decode';
-import { get, post } from './api.js';
+import {
+  getRequest,
+  postRequest
+} from './api.js';
 
 import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
@@ -71,7 +74,7 @@ export default {
 
     async fetchUser () {
       try {
-        const { data: user } = await get('/api/account/me/');
+        const { data: user } = await getRequest('/api/account/me/');
 
         this.user = user;
       } catch (err) {
@@ -82,7 +85,7 @@ export default {
 
     async refreshToken () {
       try {
-        const { data } = await post('/api/account/token/refresh/', {
+        const { data } = await postRequest('/api/account/token/refresh/', {
           refresh: localStorage.getItem('refresh')
         });
 

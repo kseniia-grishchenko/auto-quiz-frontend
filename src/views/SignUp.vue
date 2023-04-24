@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { postUnauthorized } from '../api.js';
+import { postRequestUnauthorized } from '../api.js';
 
 export default {
   data () {
@@ -86,7 +86,7 @@ export default {
 
     async onSubmit () {
       try {
-        await postUnauthorized('/api/account/register/', {
+        await postRequestUnauthorized('/api/account/register/', {
           email: this.form.email,
           password: this.form.password,
           first_name: this.form.firstName,
