@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row v-if="active">
     <el-row :gutter="12" v-if="active">
       <el-button class="create-subject-btn" @click="modalOpened = true">
         <span>Створити предмет</span>
