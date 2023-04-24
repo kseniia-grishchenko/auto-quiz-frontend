@@ -12,6 +12,7 @@
           <sign-up v-if="!user"></sign-up>
           <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
           <subject-list v-if="user"></subject-list>
+          <course-list v-if="user"></course-list>
         </el-main>
       </el-container>
     </el-container>
@@ -27,6 +28,7 @@ import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
 import SubjectList from './views/SubjectList.vue';
+import CourseList from './views/CourseList.vue';
 
 export default {
   data: () => ({
@@ -116,7 +118,8 @@ export default {
     HeaderComp,
     SignUp,
     SignIn,
-    SubjectList
+    SubjectList,
+    CourseList
   }
 };
 </script>
