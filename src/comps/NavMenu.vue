@@ -6,12 +6,16 @@
   >
     <div class="title">Головне меню</div>
     <el-menu-item index="1">
-      <i class="el-icon-folder"></i>
-      <span slot="title">Предмети</span>
+      <el-link href="#/subjects" slot="title">
+        <i class="el-icon-folder"></i>
+        <span>Предмети</span>
+      </el-link>
     </el-menu-item>
     <el-menu-item index="2">
-      <i class="el-icon-notebook-1"></i>
-      <span slot="title">Курси</span>
+      <el-link href="#/courses" slot="title">
+        <i class="el-icon-notebook-1"></i>
+        <span>Курси</span>
+      </el-link>
     </el-menu-item>
   </el-menu>
 </template>
@@ -46,6 +50,9 @@ export default {
   font-weight: 500;
   font-size: 18px;
   line-height: 20px;
+  height: 100%;
+  width: 100%;
+  justify-content: start;
 }
 
 .el-menu-item.is-active,
