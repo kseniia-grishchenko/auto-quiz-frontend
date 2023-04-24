@@ -1,17 +1,16 @@
 <template>
   <el-menu
-    default-active="1"
+    :default-active="hash"
     class="el-menu-vertical-demo"
-    @open="handleOpen"
   >
     <div class="title">Головне меню</div>
-    <el-menu-item index="1">
+    <el-menu-item index="#/subjects">
       <el-link href="#/subjects" slot="title">
         <i class="el-icon-folder"></i>
         <span>Предмети</span>
       </el-link>
     </el-menu-item>
-    <el-menu-item index="2">
+    <el-menu-item index="#/courses">
       <el-link href="#/courses" slot="title">
         <i class="el-icon-notebook-1"></i>
         <span>Курси</span>
@@ -22,9 +21,10 @@
 
 <script>
 export default {
-  methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath);
+  props: {
+    hash: {
+      type: String,
+      default: ''
     }
   }
 };

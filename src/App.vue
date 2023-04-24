@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-aside v-if="showAside">
-        <nav-menu></nav-menu>
+        <nav-menu :hash="hash"></nav-menu>
       </el-aside>
       <el-container>
         <el-header>
