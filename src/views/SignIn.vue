@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { post } from '../api.js';
+import { postRequest } from '../api.js';
 
 export default {
   data () {
@@ -51,7 +51,7 @@ export default {
             access,
             refresh
           }
-        } = await post('/api/account/token/', {
+        } = await postRequest('/api/account/token/', {
           email: this.form.email,
           password: this.form.password
         });

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const get = (uri, params = {}) => {
+const getRequest = (uri, params = {}) => {
   return axios.get(uri, {
     headers: { Authorization: `Bearer ${localStorage.getItem('access')}` },
     params
@@ -8,7 +8,7 @@ const get = (uri, params = {}) => {
     .then((response) => response);
 };
 
-const getUnautorized = (uri, params = {}) => {
+const getRequestUnautorized = (uri, params = {}) => {
   axios.get(uri, {
     params
   }).then(response => {
@@ -16,7 +16,7 @@ const getUnautorized = (uri, params = {}) => {
   });
 };
 
-const postUnauthorized = async (uri, payload = {}) => {
+const postRequestUnauthorized = async (uri, payload = {}) => {
   await axios.post(uri,
     payload,
     {
@@ -26,7 +26,7 @@ const postUnauthorized = async (uri, payload = {}) => {
     });
 };
 
-const post = async (uri, payload = {}) => {
+const postRequest = async (uri, payload = {}) => {
   return axios.post(uri,
     payload, {
       headers: {
@@ -37,9 +37,45 @@ const post = async (uri, payload = {}) => {
     .then((response) => response);
 };
 
+const putRequest = async (uri, payload = {}) => {
+  return axios.put(uri,
+    payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response);
+};
+
+const patchRequest = async (uri, payload = {}) => {
+  return axios.patch(uri,
+    payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response);
+};
+
+const deleteRequest = async (uri) => {
+  return axios.delete(uri,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response);
+};
+
 export {
-  get,
-  getUnautorized,
-  post,
-  postUnauthorized
+  getRequest,
+  getRequestUnautorized,
+  postRequest,
+  postRequestUnauthorized,
+  putRequest,
+  patchRequest,
+  deleteRequest
 };
