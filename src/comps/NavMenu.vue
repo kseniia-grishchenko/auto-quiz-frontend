@@ -26,7 +26,7 @@
 <script>
 export default {
   data: () => ({
-    collapse: false
+    collapse: true
   }),
   props: {
     hash: {
