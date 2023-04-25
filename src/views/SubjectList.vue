@@ -37,19 +37,8 @@
       :visible="!!createdSubject"
       top="30vh"
       @close="createdSubject = null">
-      <h3>Запрошувальне посилання</h3>
-      <div class="invitation-token">
-        <span>{{createdSubject.invitation_token}}</span>
-        <i class="el-icon-document-copy" @click="copyToken"></i>
-      </div>
-      <el-alert
-        v-if="createdSubject"
-        ref="alertEl"
-        :style="{display: 'none'}"
-        :title="'Copied ' + this.createdSubject.invitation_token"
-        :closable="false"
-        type="success">
-      </el-alert>
+      <invitation-token-card :invitationToken="createdSubject.invitation_token">
+      </invitation-token-card>
     </el-dialog>
     <el-dialog
       :visible="!!subjectActive"
@@ -76,6 +65,7 @@ import {
   deleteRequest
 } from '../api.js';
 import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
+import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({
@@ -166,16 +156,6 @@ export default {
         });
       }
       this.form.name = '';
-    },
-    async copyToken () {
-      this.alertEl = this.$refs.alertEl.$el;
-
-      await navigator.clipboard.writeText(this.createdSubject.invitation_token);
-      this.alertEl.style.display = 'initial';
-
-      setTimeout(() => {
-        this.alertEl.style.display = 'none';
-      }, 1000);
     }
   },
   watch: {
@@ -192,7 +172,8 @@ export default {
     window.removeEventListener('hashchange', this.hashHandler);
   },
   components: {
-    SubjectInfoCard
+    SubjectInfoCard,
+    InvitationTokenCard
   }
 };
 </script>
@@ -208,7 +189,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-@import '../assets/variables.scss';
   h3 {
     font-weight: 700;
     font-size: 20px;
@@ -247,21 +227,5 @@ export default {
       align-items: center;
       justify-content: center;
     }
-  }
-
-  .invitation-token {
-    background-color: $secondary-bg;
-    padding: 16px 12px;
-    display: flex;
-    justify-content: space-between;
-    color: $main-font;
-    font-size: 14px;
-    line-height: 17px;
-    margin-bottom: 20px;
-
-    i {
-      cursor: pointer;
-    }
-
   }
 </style>
