@@ -47,6 +47,14 @@
       </el-form>
     </el-dialog>
     <el-dialog
+      v-if="createdCourse"
+      :visible="!!createdCourse"
+      top="30vh"
+      @close="createdCourse = null">
+      <invitation-token-card :invitationToken="createdCourse.invitation_token">
+      </invitation-token-card>
+    </el-dialog>
+    <el-dialog
       :visible="!!courseActive"
       title="Детальна інформація"
       @close="handleCloseInfoCard"
@@ -73,12 +81,14 @@ import {
   deleteRequest
 } from '../api.js';
 import CourseInfoCard from '../comps/CourseInfoCard.vue';
+import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({
     active: false,
     needToRefresh: false,
     modalOpened: false,
+    createdCourse: null,
     courseActive: null,
     subjects: [],
     courses: [],
@@ -169,12 +179,13 @@ export default {
 
     async onSubmit () {
       try {
-        await postRequest('/api/courses/', {
-          editCourseName: this.form.name,
+        const { data: createdCourse } = await postRequest('/api/courses/', {
+          name: this.form.name,
           subject: this.form.subject
         });
         this.fetchCourses();
         this.modalOpened = false;
+        this.createdCourse = createdCourse;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -200,7 +211,8 @@ export default {
     window.removeEventListener('hashchange', this.hashHandler);
   },
   components: {
-    CourseInfoCard
+    CourseInfoCard,
+    InvitationTokenCard
   }
 };
 </script>
