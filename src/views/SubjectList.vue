@@ -33,6 +33,25 @@
       </el-form>
     </el-dialog>
     <el-dialog
+      v-if="createdSubject"
+      :visible="!!createdSubject"
+      top="30vh"
+      @close="createdSubject = null">
+      <h3>Запрошувальне посилання</h3>
+      <div class="invitation-token">
+        <span>{{createdSubject.invitation_token}}</span>
+        <i class="el-icon-document-copy" @click="copyToken"></i>
+      </div>
+      <el-alert
+        v-if="createdSubject"
+        ref="alertEl"
+        :style="{display: 'none'}"
+        :title="'Copied ' + this.createdSubject.invitation_token"
+        :closable="false"
+        type="success">
+      </el-alert>
+    </el-dialog>
+    <el-dialog
       :visible="!!subjectActive"
       title="Детальна інформація"
       @close="handleCloseInfoCard"
@@ -63,6 +82,7 @@ export default {
     active: false,
     needToRefresh: false,
     modalOpened: false,
+    createdSubject: null,
     subjectActive: null,
     subjects: [],
     form: {
@@ -132,11 +152,12 @@ export default {
 
     async onSubmit () {
       try {
-        await postRequest('/api/subjects/', {
+        const { data: createdSubject } = await postRequest('/api/subjects/', {
           name: this.form.name
         });
         this.fetchSubjects();
         this.modalOpened = false;
+        this.createdSubject = createdSubject;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -145,6 +166,16 @@ export default {
         });
       }
       this.form.name = '';
+    },
+    async copyToken () {
+      this.alertEl = this.$refs.alertEl.$el;
+
+      await navigator.clipboard.writeText(this.createdSubject.invitation_token);
+      this.alertEl.style.display = 'initial';
+
+      setTimeout(() => {
+        this.alertEl.style.display = 'none';
+      }, 1000);
     }
   },
   watch: {
@@ -177,6 +208,7 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
   h3 {
     font-weight: 700;
     font-size: 20px;
@@ -184,11 +216,11 @@ export default {
     margin-bottom: 8px;
   }
 
-  span {
+  .create-subject-btn span {
     font-size: 18px;
     font-weight: 500;
   }
-  span:last-of-type {
+  .create-subject-btn span:last-of-type {
     font-size: 22px;
   }
 
@@ -215,5 +247,21 @@ export default {
       align-items: center;
       justify-content: center;
     }
+  }
+
+  .invitation-token {
+    background-color: $secondary-bg;
+    padding: 16px 12px;
+    display: flex;
+    justify-content: space-between;
+    color: $main-font;
+    font-size: 14px;
+    line-height: 17px;
+    margin-bottom: 20px;
+
+    i {
+      cursor: pointer;
+    }
+
   }
 </style>
