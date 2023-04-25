@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-aside v-if="showAside">
+      <el-aside v-if="showAside" width="auto">
         <nav-menu :hash="hash"></nav-menu>
       </el-aside>
       <el-container>

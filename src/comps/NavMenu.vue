@@ -1,30 +1,42 @@
 <template>
-  <el-menu
-    :default-active="hash"
-    class="el-menu-vertical-demo"
-  >
-    <div class="title">Головне меню</div>
-    <el-menu-item index="#/subjects">
-      <el-link href="#/subjects" slot="title">
+    <el-menu
+      :default-active="hash"
+      class="el-menu-vertical-demo"
+      :collapse="collapse"
+    >
+      <el-menu-item class="sidebar-title" disabled>
+        <i class="el-icon-house"></i>
+        <span slot="title">Головне меню</span>
+      </el-menu-item>
+      <el-menu-item index="#/subjects" @click="redirectTo('#/subjects')">
         <i class="el-icon-folder"></i>
-        <span>Предмети</span>
-      </el-link>
-    </el-menu-item>
-    <el-menu-item index="#/courses">
-      <el-link href="#/courses" slot="title">
+        <span slot="title">Предмети</span>
+      </el-menu-item>
+      <el-menu-item index="#/courses" @click="redirectTo('#/courses')">
         <i class="el-icon-notebook-1"></i>
-        <span>Курси</span>
-      </el-link>
-    </el-menu-item>
-  </el-menu>
+        <span slot="title">Курси</span>
+      </el-menu-item>
+      <div class="collapse-btn" @click="collapse = !collapse">
+        <i v-if="!collapse" class="el-icon-d-arrow-left"></i>
+        <i v-else class="el-icon-d-arrow-right"></i>
+      </div>
+    </el-menu>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    collapse: false
+  }),
   props: {
     hash: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    redirectTo (hash) {
+      location.hash = hash;
     }
   }
 };
@@ -33,8 +45,15 @@ export default {
 <style lang="scss">
 @import '../assets/variables.scss';
 
-.el-menu-vertical-demo {
+.el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 300px;
+}
+
+.el-menu--collapse {
+  width: 80px;
+}
+
+.el-menu-vertical-demo {
   height: 100%;
   background-color: $main-font;
   padding: 30px 20px;
@@ -43,6 +62,9 @@ export default {
 .el-menu-item {
   border-radius: 10px;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .el-menu-item > * {
@@ -50,9 +72,6 @@ export default {
   font-weight: 500;
   font-size: 18px;
   line-height: 20px;
-  height: 100%;
-  width: 100%;
-  justify-content: start;
 }
 
 .el-menu-item.is-active,
@@ -60,13 +79,36 @@ export default {
   background-color: #404454;
 }
 
-.title {
-  color: #404454;
+.sidebar-title > * {
+  color: #404454 !important;
   font-weight: 700;
   font-size: 14px;
   line-height: 17px;
-  margin-bottom: 25px;
-  padding: 0 20px;
   text-transform: uppercase;
+  width: auto;
+}
+
+.sidebar-title > i {
+  margin-top: -2px;
+}
+
+.collapse-btn {
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.el-menu-item.is-disabled.sidebar-title {
+  cursor: auto;
+  opacity: 1;
+}
+
+.el-tooltip {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 </style>
