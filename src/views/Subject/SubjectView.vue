@@ -4,7 +4,7 @@
       <nav-header :title="subject.name" :navItems="navItems" :hash="hash"></nav-header>
     </el-header>
     <el-main>
-
+      <subject-info :subject="subject" v-show="subjectInfoActive"></subject-info>
     </el-main>
   </el-container>
 </template>
@@ -14,6 +14,8 @@ import {
   getRequest
 } from '../../api.js';
 import NavHeader from '../../comps/NavHeader.vue';
+import SubjectInfo from './SubjectInfo.vue';
+
 export default {
   data: () => ({
     hash: '',
@@ -30,9 +32,12 @@ export default {
         },
         {
           title: 'Інформація',
-          link: `#/subject?id=${this.id}&info=true`
+          link: `#/subjects?id=${this.id}&info=true`
         }
       ];
+    },
+    subjectInfoActive () {
+      return this.hash.match(/info=true/);
     }
   },
   methods: {
@@ -58,7 +63,8 @@ export default {
     window.removeEventListener('hashchange', this.hashHandler);
   },
   components: {
-    NavHeader
+    NavHeader,
+    SubjectInfo
   }
 };
 </script>
