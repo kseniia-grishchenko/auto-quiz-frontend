@@ -4,7 +4,8 @@
       <nav-header :title="subject.name" :navItems="navItems" :hash="hash"></nav-header>
     </el-header>
     <el-main>
-      <subject-info :subject="subject" v-show="subjectInfoActive"></subject-info>
+      <subject-info :subject="subject" v-if="subjectInfoActive"></subject-info>
+      <subject-quiz-list :quizzes="quizzes" v-else></subject-quiz-list>
     </el-main>
   </el-container>
 </template>
@@ -15,12 +16,14 @@ import {
 } from '../../api.js';
 import NavHeader from '../../comps/NavHeader.vue';
 import SubjectInfo from './SubjectInfo.vue';
+import SubjectQuizList from './SubjectQuizList.vue';
 
 export default {
   data: () => ({
     hash: '',
     id: null,
     subject: {},
+    quizzes: [],
     active: false
   }),
   computed: {
@@ -53,6 +56,8 @@ export default {
     async id (id) {
       const { data: subject } = await getRequest(`/api/subjects/${id}`);
       this.subject = subject;
+      const { data: quizzes } = await getRequest(`/api/subjects/${id}/quizzes`);
+      this.quizzes = quizzes;
     }
   },
   mounted () {
@@ -64,7 +69,8 @@ export default {
   },
   components: {
     NavHeader,
-    SubjectInfo
+    SubjectInfo,
+    SubjectQuizList
   }
 };
 </script>
