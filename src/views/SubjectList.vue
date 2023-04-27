@@ -91,7 +91,7 @@ export default {
   }),
   methods: {
     redirectToSubject (id) {
-      location.hash = `subjects?id=${id}`;
+      location.hash = `#/subjects?id=${id}`;
     },
 
     handleCardClick (subject) {
@@ -171,7 +171,7 @@ export default {
   },
   watch: {
     active (value) {
-      if (!value) return;
+      if (!value || this.subjects.length) return;
       this.fetchSubjects();
     }
   },
