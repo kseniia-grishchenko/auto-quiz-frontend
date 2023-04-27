@@ -5,7 +5,10 @@
     </el-header>
     <el-main>
       <subject-info :subject="subject" v-if="subjectInfoActive"></subject-info>
-      <subject-quiz-list :quizzes="quizzes" v-else></subject-quiz-list>
+      <subject-quiz-list
+        v-else
+        :subjectId="id">
+      </subject-quiz-list>
     </el-main>
   </el-container>
 </template>
@@ -23,7 +26,6 @@ export default {
     hash: '',
     id: null,
     subject: {},
-    quizzes: [],
     active: false
   }),
   computed: {
@@ -49,15 +51,13 @@ export default {
       const match = location.hash.match(/#\/subjects\?id=(\d+)/);
       if (!match) return;
       this.active = !!match[0];
-      this.id = match[1];
+      this.id = Number(match[1]);
     }
   },
   watch: {
     async id (id) {
       const { data: subject } = await getRequest(`/api/subjects/${id}`);
       this.subject = subject;
-      const { data: quizzes } = await getRequest(`/api/subjects/${id}/quizzes`);
-      this.quizzes = quizzes;
     }
   },
   mounted () {
