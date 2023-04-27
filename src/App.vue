@@ -4,18 +4,18 @@
       <el-aside v-if="showAside" width="auto">
         <nav-menu :hash="hash"></nav-menu>
       </el-aside>
-      <el-container>
+      <el-container v-show="showDefaultHeader">
         <el-header>
-          <header-comp></header-comp>
+          <header-comp :hash="hash"></header-comp>
         </el-header>
         <el-main>
           <sign-up v-if="!user"></sign-up>
           <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
           <subject-list v-if="user"></subject-list>
           <course-list v-if="user"></course-list>
-          <subject-view v-if="user"></subject-view>
         </el-main>
       </el-container>
+      <subject-view v-if="user && !showDefaultHeader"></subject-view>
     </el-container>
   </div>
 </template>
@@ -44,6 +44,10 @@ export default {
   computed: {
     showAside () {
       return !this.hash.match(/sign-up|sign-in/);
+    },
+
+    showDefaultHeader () {
+      return this.hash.match(/#\/sign-in|sign-up|subjects$|courses$/);
     }
   },
   methods: {
