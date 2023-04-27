@@ -245,7 +245,7 @@ export default {
     font-size: 18px;
     font-weight: 500;
   }
-  span:last-of-type {
+  .create-course-btn span:last-of-type {
     font-size: 22px;
   }
 

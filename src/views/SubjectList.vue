@@ -196,7 +196,7 @@ export default {
     margin-bottom: 8px;
   }
 
-  .create-subject-btn span {
+  span {
     font-size: 18px;
     font-weight: 500;
   }
