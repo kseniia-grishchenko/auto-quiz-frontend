@@ -13,6 +13,7 @@
           <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
           <subject-list v-if="user"></subject-list>
           <course-list v-if="user"></course-list>
+          <subject-view v-if="user"></subject-view>
         </el-main>
       </el-container>
     </el-container>
@@ -32,6 +33,7 @@ import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
 import SubjectList from './views/SubjectList.vue';
 import CourseList from './views/CourseList.vue';
+import SubjectView from './views/SubjectView.vue';
 
 export default {
   data: () => ({
@@ -122,7 +124,8 @@ export default {
     SignUp,
     SignIn,
     SubjectList,
-    CourseList
+    CourseList,
+    SubjectView
   }
 };
 </script>
