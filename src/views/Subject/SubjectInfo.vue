@@ -28,6 +28,8 @@ export default {
 
 <style lang="scss" scoped>
 .content {
+  padding: 12px 0;
+
   div {
     margin-bottom: 20px;
     display: flex;
