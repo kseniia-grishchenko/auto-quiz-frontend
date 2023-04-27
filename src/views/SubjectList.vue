@@ -7,20 +7,23 @@
       </el-button>
     </el-row>
     <div class="list">
-      <el-card
+      <div
         v-for="(subject, index) in subjects"
-        :key="index"
-        class="subject-card"
-      >
-        <div
-          slot="header"
-          class="header"
-          :style="{backgroundColor: colors[index % 5]}"
+        @click="redirectToSubject(subject.id)"
+        :key="index">
+        <el-card
+          class="subject-card"
         >
-          <span>{{subject.name}}</span>
-          <div class="details" @click="subjectActive = subject"><i class="el-icon-more"></i></div>
-        </div>
-      </el-card>
+          <div
+            slot="header"
+            class="header"
+            :style="{backgroundColor: colors[index % 5]}"
+          >
+            <span>{{subject.name}}</span>
+            <div class="details" @click.stop="handleCardClick(subject)"><i class="el-icon-more"></i></div>
+          </div>
+        </el-card>
+      </div>
     </div>
     <el-dialog :visible.sync="modalOpened" title="Назва предмету" top="30vh">
       <el-form ref="form" :model="form" class="input-section">
@@ -87,6 +90,14 @@ export default {
     ]
   }),
   methods: {
+    redirectToSubject (id) {
+      location.hash = `subjects?id=${id}`;
+    },
+
+    handleCardClick (subject) {
+      this.subjectActive = subject;
+    },
+
     async editSubjectName ({ id, name }) {
       try {
         const { data: subjectActive } = await putRequest(`/api/subjects/${id}/`, {
