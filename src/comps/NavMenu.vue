@@ -1,7 +1,7 @@
 <template>
     <el-menu
       :default-active="hash"
-      class="el-menu-vertical-demo"
+      class="nav-menu"
       :collapse="collapse"
     >
       <el-menu-item class="sidebar-title" disabled>
@@ -45,7 +45,7 @@ export default {
 <style lang="scss">
 @import '../assets/variables.scss';
 
-.el-menu-vertical-demo:not(.el-menu--collapse) {
+.nav-menu:not(.el-menu--collapse) {
   width: 300px;
 }
 
@@ -53,13 +53,13 @@ export default {
   width: 80px;
 }
 
-.el-menu-vertical-demo {
+.nav-menu {
   height: 100%;
   background-color: $main-font;
   padding: 30px 20px;
 }
 
-.el-menu-item {
+.nav-menu .el-menu-item {
   border-radius: 10px;
   margin-bottom: 10px;
   display: flex;
@@ -67,7 +67,7 @@ export default {
   justify-content: start;
 }
 
-.el-menu-item > * {
+.nav-menu .el-menu-item > * {
   color: #fff !important;
   font-weight: 500;
   font-size: 18px;
