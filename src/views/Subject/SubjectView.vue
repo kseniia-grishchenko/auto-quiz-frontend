@@ -12,8 +12,8 @@
 <script>
 import {
   getRequest
-} from '../api.js';
-import NavHeader from '../comps/NavHeader.vue';
+} from '../../api.js';
+import NavHeader from '../../comps/NavHeader.vue';
 export default {
   data: () => ({
     hash: '',
