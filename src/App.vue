@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <el-container>
-      <el-aside v-if="showAside">
+      <el-aside v-if="showAside" width="auto">
         <nav-menu :hash="hash"></nav-menu>
       </el-aside>
-      <el-container>
+      <el-container v-show="showDefaultHeader">
         <el-header>
-          <header-comp></header-comp>
+          <header-comp :hash="hash"></header-comp>
         </el-header>
         <el-main>
           <sign-up v-if="!user"></sign-up>
@@ -15,6 +15,7 @@
           <course-list v-if="user"></course-list>
         </el-main>
       </el-container>
+      <subject-view v-if="user && !showDefaultHeader"></subject-view>
     </el-container>
   </div>
 </template>
@@ -30,8 +31,9 @@ import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
-import SubjectList from './views/SubjectList.vue';
-import CourseList from './views/CourseList.vue';
+import SubjectList from './views/Subject/SubjectList.vue';
+import CourseList from './views/Course/CourseList.vue';
+import SubjectView from './views/Subject/SubjectView.vue';
 
 export default {
   data: () => ({
@@ -42,6 +44,10 @@ export default {
   computed: {
     showAside () {
       return !this.hash.match(/sign-up|sign-in/);
+    },
+
+    showDefaultHeader () {
+      return this.hash.match(/#\/sign-in|sign-up|subjects$|courses$/);
     }
   },
   methods: {
@@ -122,7 +128,8 @@ export default {
     SignUp,
     SignIn,
     SubjectList,
-    CourseList
+    CourseList,
+    SubjectView
   }
 };
 </script>

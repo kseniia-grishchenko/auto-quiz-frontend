@@ -1,31 +1,45 @@
 <template>
   <el-row v-if="active">
     <el-row :gutter="12" v-if="active">
-      <el-button class="create-subject-btn" @click="modalOpened = true">
-        <span>Створити предмет</span>
+      <el-button class="create-course-btn" @click="modalOpened = true">
+        <span>Створити курс</span>
         <span>+</span>
       </el-button>
     </el-row>
     <div class="list">
       <el-card
-        v-for="(subject, index) in subjects"
+        v-for="(course, index) in courses"
         :key="index"
-        class="subject-card"
+        class="course-card"
       >
         <div
           slot="header"
           class="header"
           :style="{backgroundColor: colors[index % 5]}"
         >
-          <span>{{subject.name}}</span>
-          <div class="details" @click="subjectActive = subject"><i class="el-icon-more"></i></div>
+          <span>{{course.name}}</span>
+          <div class="details" @click="courseActive = course"><i class="el-icon-more"></i></div>
         </div>
       </el-card>
     </div>
-    <el-dialog :visible.sync="modalOpened" title="Назва предмету" top="30vh">
+    <el-dialog
+      :visible.sync="modalOpened"
+      title="Створити"
+      top="30vh">
       <el-form ref="form" :model="form" class="input-section">
+        <h3>Назва курсу</h3>
         <el-form-item>
           <el-input placeholder="Введіть назву..." v-model="form.name"></el-input>
+        </el-form-item>
+        <h3>Обрати предмет</h3>
+        <el-form-item>
+          <el-radio-group v-model="form.subject" class="subject-choice">
+            <el-radio
+              v-for="(subject, index) in subjects"
+              :key="index"
+              :label="subject.id"
+            >{{subject.name}}</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="action" @click="onSubmit">Створити</el-button>
@@ -33,18 +47,28 @@
       </el-form>
     </el-dialog>
     <el-dialog
-      :visible="!!subjectActive"
+      v-if="createdCourse"
+      :visible="!!createdCourse"
+      top="30vh"
+      @close="createdCourse = null">
+      <invitation-token-card :invitationToken="createdCourse.invitation_token">
+      </invitation-token-card>
+    </el-dialog>
+    <el-dialog
+      :visible="!!courseActive"
       title="Детальна інформація"
       @close="handleCloseInfoCard"
       width="60%"
       top="30vh"
     >
-      <subject-info-card
-        v-if="subjectActive"
-        :subject="subjectActive"
-        @edit-subject-name="editSubjectName"
-        @delete-subject="deleteSubject"
-      ></subject-info-card>
+      <course-info-card
+        v-if="courseActive"
+        :course="courseActive"
+        :subject="courseSubject"
+        @edit-course-name="editCourseName"
+        @delete-course="deleteCourse"
+      >
+      </course-info-card>
     </el-dialog>
   </el-row>
 </template>
@@ -53,20 +77,24 @@
 import {
   getRequest,
   postRequest,
-  putRequest,
+  patchRequest,
   deleteRequest
-} from '../api.js';
-import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
+} from '../../api.js';
+import CourseInfoCard from '../../comps/CourseInfoCard.vue';
+import InvitationTokenCard from '../../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({
     active: false,
     needToRefresh: false,
     modalOpened: false,
-    subjectActive: null,
+    createdCourse: null,
+    courseActive: null,
     subjects: [],
+    courses: [],
     form: {
-      name: ''
+      name: '',
+      subject: null
     },
     colors: [
       '#FF595E',
@@ -76,13 +104,19 @@ export default {
       '#6A4C93'
     ]
   }),
+  computed: {
+    courseSubject () {
+      if (!this.courseActive) return;
+      return this.subjects.find(subject => subject.id === this.courseActive.subject).name;
+    }
+  },
   methods: {
-    async editSubjectName ({ id, name }) {
+    async editCourseName ({ id, name }) {
       try {
-        const { data: subjectActive } = await putRequest(`/api/subjects/${id}/`, {
+        const { data: courseActive } = await patchRequest(`/api/courses/${id}/`, {
           name
         });
-        this.subjectActive = subjectActive;
+        this.courseActive = courseActive;
         this.needToRefresh = true;
       } catch (err) {
         this.$notify.error({
@@ -93,10 +127,10 @@ export default {
       }
     },
 
-    async deleteSubject (id) {
+    async deleteCourse (id) {
       try {
-        await deleteRequest(`/api/subjects/${id}/`);
-        this.subjectActive = null;
+        await deleteRequest(`/api/courses/${id}/`);
+        this.courseActive = null;
         this.needToRefresh = true;
       } catch (err) {
         this.$notify.error({
@@ -108,13 +142,26 @@ export default {
     },
 
     handleCloseInfoCard () {
-      this.subjectActive = null;
-      if (this.needToRefresh) this.fetchSubjects();
+      this.courseActive = null;
+      if (this.needToRefresh) this.fetchCourses();
       this.needToRefresh = false;
     },
 
     hashHandler () {
-      this.active = !!location.hash.match('subjects$');
+      this.active = !!location.hash.match('courses$');
+    },
+
+    async fetchCourses () {
+      try {
+        const { data: courses } = await getRequest('/api/courses');
+        this.courses = courses;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     },
 
     async fetchSubjects () {
@@ -132,11 +179,13 @@ export default {
 
     async onSubmit () {
       try {
-        await postRequest('/api/subjects/', {
-          name: this.form.name
+        const { data: createdCourse } = await postRequest('/api/courses/', {
+          name: this.form.name,
+          subject: this.form.subject
         });
-        this.fetchSubjects();
+        this.fetchCourses();
         this.modalOpened = false;
+        this.createdCourse = createdCourse;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -150,6 +199,7 @@ export default {
   watch: {
     active (value) {
       if (!value) return;
+      this.fetchCourses();
       this.fetchSubjects();
     }
   },
@@ -161,19 +211,26 @@ export default {
     window.removeEventListener('hashchange', this.hashHandler);
   },
   components: {
-    SubjectInfoCard
+    CourseInfoCard,
+    InvitationTokenCard
   }
 };
 </script>
 
 <style lang="scss">
-  .create-subject-btn > span {
+  .create-course-btn > span {
     display: flex;
     justify-content: space-between;
   }
 
-  .subject-card > .el-card__header {
+  .course-card > .el-card__header {
     padding: 0;
+  }
+
+  .subject-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 </style>
 <style lang="scss" scoped>
@@ -188,7 +245,7 @@ export default {
     font-size: 18px;
     font-weight: 500;
   }
-  span:last-of-type {
+  .create-course-btn span:last-of-type {
     font-size: 22px;
   }
 
