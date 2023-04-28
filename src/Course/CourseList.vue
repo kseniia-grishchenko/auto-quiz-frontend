@@ -79,9 +79,9 @@ import {
   postRequest,
   patchRequest,
   deleteRequest
-} from '../../api.js';
-import CourseInfoCard from '../../comps/CourseInfoCard.vue';
-import InvitationTokenCard from '../../comps/InvitationTokenCard.vue';
+} from '../api.js';
+import CourseInfoCard from '../comps/CourseInfoCard.vue';
+import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({

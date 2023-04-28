@@ -77,8 +77,8 @@ import {
   getRequest,
   patchRequest,
   postRequest
-} from '../../api.js';
-import CreateBtn from '../../comps/CreateBtn.vue';
+} from '../api.js';
+import CreateBtn from '../comps/CreateBtn.vue';
 
 export default {
   data: () => ({

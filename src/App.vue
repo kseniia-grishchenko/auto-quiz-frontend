@@ -31,9 +31,9 @@ import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
-import SubjectList from './views/Subject/SubjectList.vue';
-import CourseList from './views/Course/CourseList.vue';
-import SubjectView from './views/Subject/SubjectView.vue';
+import SubjectList from './Subject/SubjectList.vue';
+import CourseList from './Course/CourseList.vue';
+import SubjectView from './Subject/SubjectView.vue';
 
 export default {
   data: () => ({
