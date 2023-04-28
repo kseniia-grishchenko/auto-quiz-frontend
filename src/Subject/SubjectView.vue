@@ -49,8 +49,8 @@ export default {
     hashHandler () {
       this.hash = location.hash;
       const match = location.hash.match(/#\/subjects\?id=(\d+)/);
+      this.active = !!match;
       if (!match) return;
-      this.active = !!match[0];
       this.id = Number(match[1]);
     }
   },
