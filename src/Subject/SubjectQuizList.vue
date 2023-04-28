@@ -95,8 +95,7 @@ export default {
   }),
   methods: {
     handleQuizRedirect (quiz) {
-      console.log(quiz);
-      location.hash = `#/quiz?id=${quiz.id}`;
+      location.hash = `#/subjects/${this.subjectId}/quiz/${quiz.id}`;
     },
 
     async createQuiz () {
@@ -161,7 +160,7 @@ export default {
     },
 
     hashHandler () {
-      const match = location.hash.match(/#\/subjects\?id=(\d+)/);
+      const match = location.hash.match(/#\/subjects\/(\d+)/);
       if (!match) return;
       this.subjectId = Number(match[1]);
     }

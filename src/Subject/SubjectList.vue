@@ -91,7 +91,7 @@ export default {
   }),
   methods: {
     redirectToSubject (id) {
-      location.hash = `#/subjects?id=${id}`;
+      location.hash = `#/subjects/${id}`;
     },
 
     handleCardClick (subject) {
