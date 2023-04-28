@@ -43,6 +43,7 @@ export default {
   },
   watch: {
     async quizId (id) {
+      this.quiz = {};
       try {
         const { data: quiz } = await getRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}`);
         this.quiz = quiz;
