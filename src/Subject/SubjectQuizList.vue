@@ -24,12 +24,12 @@
         <el-button
           class="quiz-action"
           size="mini"
-          @click="quizToEdit = scope.row">Редагувати</el-button>
+          @click.stop="quizToEdit = scope.row">Редагувати</el-button>
         <el-button
           class="quiz-action"
           size="mini"
           type="danger"
-          @click="quizToDelete = scope.row">Видалити</el-button>
+          @click.stop="quizToDelete = scope.row">Видалити</el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -49,26 +49,18 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible="!!quizToEdit" top="30vh" v-if="quizToEdit" @close="quizToEdit = null">
-      <el-form ref="form" :model="quizToEdit" class="input-section">
-        <h3>Назва</h3>
-        <el-form-item>
-          <el-input placeholder="Введіть назву..." v-model="quizToEdit.name"></el-input>
-        </el-form-item>
-        <h3>Тривалість</h3>
-        <el-input-number v-model="quizToEdit.max_duration" :min="1"></el-input-number>
-        <el-form-item>
-          <el-button type="primary" class="action" @click="editQuiz">Зберегти</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <el-dialog :visible="!!quizToDelete" top="30vh" v-if="quizToDelete" @close="quizToDelete = null">
-      <h3>Ви впевнені що хочете видалити цей квіз?</h3>
-      <el-row>
-        <el-button class="quiz-action" @click="deleteQuiz" type="danger">Так</el-button>
-        <el-button class="quiz-action" @click="quizToDelete = null">Ні</el-button>
-      </el-row>
-    </el-dialog>
+    <edit-quiz-modal
+      :visible="!!quizToEdit"
+      :quiz="quizToEdit"
+      @close="quizToEdit = null"
+      @edit-quiz="editQuiz"
+    >
+    </edit-quiz-modal>
+    <delete-quiz-modal
+      :visible="!!quizToDelete"
+      @close="quizToDelete = null"
+      @delete-quiz="deleteQuiz"
+    ></delete-quiz-modal>
   </div>
 </template>
 
@@ -80,6 +72,8 @@ import {
   postRequest
 } from '../api.js';
 import CreateBtn from '../comps/CreateBtn.vue';
+import EditQuizModal from './EditQuizModal.vue';
+import DeleteQuizModal from './DeleteQuizModal.vue';
 
 export default {
   data: () => ({
@@ -115,7 +109,8 @@ export default {
       }
     },
 
-    async  editQuiz () {
+    async  editQuiz (editedQuiz) {
+      this.quizToEdit = editedQuiz;
       try {
         await patchRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizToEdit.id}/`, {
           name: this.quizToEdit.name,
@@ -177,7 +172,11 @@ export default {
   beforeDestroy () {
     window.removeEventListener('hashchange', this.hashHandler);
   },
-  components: { CreateBtn }
+  components: {
+    CreateBtn,
+    EditQuizModal,
+    DeleteQuizModal
+  }
 };
 </script>
 
