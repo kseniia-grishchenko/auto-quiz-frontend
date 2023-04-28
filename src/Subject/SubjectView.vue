@@ -56,8 +56,16 @@ export default {
   },
   watch: {
     async id (id) {
-      const { data: subject } = await getRequest(`/api/subjects/${id}`);
-      this.subject = subject;
+      try {
+        const { data: subject } = await getRequest(`/api/subjects/${id}`);
+        this.subject = subject;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     }
   },
   mounted () {
