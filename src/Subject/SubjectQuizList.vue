@@ -8,6 +8,7 @@
     <el-table
       v-if="quizzes.length"
       :data="quizzes"
+      @cell-click="handleQuizRedirect"
       :style="{
         width: '100%',
         fontSize: '20px',
@@ -93,6 +94,11 @@ export default {
     }
   }),
   methods: {
+    handleQuizRedirect (quiz) {
+      console.log(quiz);
+      location.hash = `#/quiz?id=${quiz.id}`;
+    },
+
     async createQuiz () {
       try {
         await postRequest(`/api/subjects/${this.subjectId}/quizzes/`, {
@@ -143,8 +149,8 @@ export default {
 
     async fetchQuizzes () {
       try {
-      const { data: quizzes } = await getRequest(`/api/subjects/${this.subjectId}/quizzes`);
-      this.quizzes = quizzes;
+        const { data: quizzes } = await getRequest(`/api/subjects/${this.subjectId}/quizzes`);
+        this.quizzes = quizzes;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
