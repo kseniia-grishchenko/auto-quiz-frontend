@@ -41,13 +41,6 @@ export default {
 </script>
 
 <style>
-h3 {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  margin-bottom: 8px;
-}
-
 .action {
   margin-top: 20px;
 }

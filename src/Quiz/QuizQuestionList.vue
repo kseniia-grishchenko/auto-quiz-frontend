@@ -114,13 +114,6 @@ export default {
   font-size: 20px;
 }
 
-h3 {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  margin-bottom: 8px;
-}
-
 .quiz-action {
   width: auto;
 }

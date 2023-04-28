@@ -200,13 +200,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-  h3 {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    margin-bottom: 8px;
-  }
-
   span {
     font-size: 18px;
     font-weight: 500;
