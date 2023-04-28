@@ -142,8 +142,16 @@ export default {
     },
 
     async fetchQuizzes () {
+      try {
       const { data: quizzes } = await getRequest(`/api/subjects/${this.subjectId}/quizzes`);
       this.quizzes = quizzes;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     },
 
     hashHandler () {
