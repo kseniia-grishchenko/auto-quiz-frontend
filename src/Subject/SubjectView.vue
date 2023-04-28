@@ -33,16 +33,16 @@ export default {
       return [
         {
           title: 'Квізи',
-          link: `#/subjects?id=${this.id}`
+          link: `#/subjects/${this.id}`
         },
         {
           title: 'Інформація',
-          link: `#/subjects?id=${this.id}&info=true`
+          link: `#/subjects/${this.id}?info=true`
         }
       ];
     },
     subjectInfoActive () {
-      return this.hash.match(/info=true/);
+      return !!this.hash.match(/info=true/);
     }
   },
   methods: {
