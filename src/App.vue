@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-aside v-if="showAside" width="auto">
-        <nav-menu :hash="hash"></nav-menu>
+        <nav-menu :hash="hash" @sign-out="logOut"></nav-menu>
       </el-aside>
       <el-container v-show="showDefaultHeader">
         <el-header>
@@ -13,6 +13,7 @@
           <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
           <subject-list v-if="user"></subject-list>
           <course-list v-if="user"></course-list>
+          <join-subject></join-subject>
         </el-main>
       </el-container>
       <subject-view v-if="user && !showDefaultHeader"></subject-view>
@@ -36,6 +37,7 @@ import SubjectList from './Subject/SubjectList.vue';
 import CourseList from './Course/CourseList.vue';
 import SubjectView from './Subject/SubjectView.vue';
 import QuizView from './Quiz/QuizView.vue';
+import JoinSubject from './JoinSubject/JoinSubject.vue';
 
 export default {
   data: () => ({
@@ -45,11 +47,11 @@ export default {
   }),
   computed: {
     showAside () {
-      return !this.hash.match(/sign-up|sign-in/);
+      return !this.hash.match(/sign-up|sign-in|join-subject/);
     },
 
     showDefaultHeader () {
-      return this.hash.match(/#\/sign-in|sign-up|subjects$|courses$/);
+      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject/);
     }
   },
   methods: {
@@ -78,6 +80,7 @@ export default {
       localStorage.removeItem('refresh');
 
       this.user = null;
+      location.hash = '#/sign-in';
     },
 
     async fetchUser () {
@@ -132,7 +135,8 @@ export default {
     SubjectList,
     CourseList,
     SubjectView,
-    QuizView
+    QuizView,
+    JoinSubject
   }
 };
 </script>

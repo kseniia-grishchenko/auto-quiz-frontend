@@ -40,8 +40,8 @@
       :visible="!!createdSubject"
       top="30vh"
       @close="createdSubject = null">
-      <invitation-token-card :invitationToken="createdSubject.invitation_token">
-      </invitation-token-card>
+      <invitation-link-card :invitationLink="invitationLink">
+      </invitation-link-card>
     </el-dialog>
     <el-dialog
       :visible="!!subjectActive"
@@ -67,8 +67,8 @@ import {
   putRequest,
   deleteRequest
 } from '../api.js';
-import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
-import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
+import SubjectInfoCard from './SubjectInfoCard.vue';
+import InvitationLinkCard from '../comps/InvitationLinkCard.vue';
 
 export default {
   data: () => ({
@@ -89,6 +89,11 @@ export default {
       '#6A4C93'
     ]
   }),
+  computed: {
+    invitationLink () {
+      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.createdSubject.invitation_token}`;
+    }
+  },
   methods: {
     redirectToSubject (id) {
       location.hash = `#/subjects/${id}`;
@@ -135,7 +140,7 @@ export default {
     },
 
     hashHandler () {
-      this.active = !!location.hash.match('subjects$');
+      this.active = !!location.hash.match(/#\/$|subjects$/);
     },
 
     async fetchSubjects () {
@@ -184,7 +189,7 @@ export default {
   },
   components: {
     SubjectInfoCard,
-    InvitationTokenCard
+    InvitationLinkCard
   }
 };
 </script>
@@ -195,9 +200,14 @@ export default {
     justify-content: space-between;
   }
 
-  .subject-card > .el-card__header {
-    padding: 0;
+  .subject-card {
+    cursor: pointer;
+
+    > .el-card__header {
+      padding: 0;
+    }
   }
+
 </style>
 <style lang="scss" scoped>
   span {
