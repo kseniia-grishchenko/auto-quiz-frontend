@@ -4,7 +4,7 @@
       <nav-header :title="course.name" :navItems="navItems" :hash="hash"></nav-header>
     </el-header>
     <el-main>
-      Test
+      <course-task-list :course="course" :user="user"></course-task-list>
     </el-main>
   </el-container>
 </template>
@@ -13,6 +13,7 @@
 import { getRequest } from '../api.js';
 
 import NavHeader from '../comps/NavHeader.vue';
+import CourseTaskList from './CourseTaskList.vue';
 
 export default {
   data: () => ({
@@ -21,6 +22,12 @@ export default {
     course: {},
     active: false
   }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
     navItems () {
       return [
@@ -34,8 +41,8 @@ export default {
         }
       ];
     },
-    subjectInfoActive () {
-      return !!this.hash.match(/info=true/);
+    courseInfoActive () {
+      return !!this.hash.match(/#\/courses\/(\d+)?info=true/);
     }
   },
   methods: {
@@ -69,7 +76,8 @@ export default {
     window.removeEventListener('hashchange', this.hashHandler);
   },
   components: {
-    NavHeader
+    NavHeader,
+    CourseTaskList
   }
 };
 </script>
