@@ -46,14 +46,20 @@
       @edit-question="editQuestion"
       @close="questionToEdit = null"
     ></edit-question-modal>
+    <delete-question-modal
+      :visible="!!questionToDelete"
+      @close="questionToDelete = null"
+      @delete-question="deleteQuestion"
+    ></delete-question-modal>
   </div>
 </template>
 
 <script>
-import { getRequest, postRequest, patchRequest } from '../api.js';
+import { getRequest, postRequest, patchRequest, deleteRequest } from '../api.js';
 import CreateBtn from '../comps/CreateBtn.vue';
 import CreateQuestionModal from './CreateQuestionModal.vue';
 import EditQuestionModal from './EditQuestionModal.vue';
+import DeleteQuestionModal from './DeleteQuestionModal.vue';
 
 export default {
   data: () => ({
@@ -114,6 +120,20 @@ export default {
           showClose: false
         });
       }
+    },
+
+    async deleteQuestion () {
+      try {
+        await deleteRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}/questions/${this.questionToDelete.id}/`);
+        this.fetchQuestions();
+        this.questionToDelete = null;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     }
   },
   watch: {
@@ -128,7 +148,8 @@ export default {
   components: {
     CreateBtn,
     CreateQuestionModal,
-    EditQuestionModal
+    EditQuestionModal,
+    DeleteQuestionModal
   }
 };
 </script>
