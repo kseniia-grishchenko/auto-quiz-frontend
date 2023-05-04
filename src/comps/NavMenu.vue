@@ -8,7 +8,7 @@
         <i class="el-icon-house"></i>
         <span slot="title">Головне меню</span>
       </el-menu-item>
-      <el-menu-item index="#/" @click="redirectTo('#/subjects')">
+      <el-menu-item index="#/" @click="redirectTo('#/')">
         <i class="el-icon-folder"></i>
         <span slot="title">Предмети</span>
       </el-menu-item>

@@ -223,8 +223,12 @@ export default {
     justify-content: space-between;
   }
 
-  .course-card > .el-card__header {
-    padding: 0;
+  .course-card {
+    cursor: pointer;
+
+    > .el-card__header {
+      padding: 0;
+    }
   }
 
   .subject-choice {

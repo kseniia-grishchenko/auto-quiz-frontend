@@ -11,7 +11,7 @@
     <div>
       <span>Запрошувальне посилання:</span>
       <div class="action-section">
-        <span>{{subject.invitation_token}}</span>
+        <span>{{invitationLink}}</span>
         <i class="el-icon-copy-document" @click="copyToken"></i>
       </div>
     </div>
@@ -39,9 +39,14 @@ export default {
   props: {
     subject: Object
   },
+  computed: {
+    invitationLink () {
+      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.subject.invitation_token}`;
+    }
+  },
   methods: {
     async copyToken () {
-      await navigator.clipboard.writeText(this.subject.invitation_token);
+      await navigator.clipboard.writeText(this.invitationLink);
       this.alertEl.style.display = 'initial';
 
       setTimeout(() => {

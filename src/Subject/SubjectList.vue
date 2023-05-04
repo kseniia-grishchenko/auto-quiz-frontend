@@ -67,7 +67,7 @@ import {
   putRequest,
   deleteRequest
 } from '../api.js';
-import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
+import SubjectInfoCard from './SubjectInfoCard.vue';
 import InvitationLinkCard from '../comps/InvitationLinkCard.vue';
 
 export default {
@@ -200,9 +200,14 @@ export default {
     justify-content: space-between;
   }
 
-  .subject-card > .el-card__header {
-    padding: 0;
+  .subject-card {
+    cursor: pointer;
+
+    > .el-card__header {
+      padding: 0;
+    }
   }
+
 </style>
 <style lang="scss" scoped>
   span {

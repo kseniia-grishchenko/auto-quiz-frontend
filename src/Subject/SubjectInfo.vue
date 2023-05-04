@@ -10,7 +10,7 @@
     </div>
     <div>
       <span>Запрошувальне посилання:</span>
-      <span>{{subject.invitation_token}}</span>
+      <span @click="copyLink">{{invitationLink}}</span>
     </div>
   </el-row>
 </template>
@@ -28,6 +28,20 @@ export default {
       return (this.subject.teachers || [])
         .map(teacher => `${teacher.first_name} ${teacher.last_name}`)
         .join(', ');
+    },
+    invitationLink () {
+      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.subject.invitation_token}`;
+    }
+  },
+  methods: {
+    async copyLink () {
+      await navigator.clipboard.writeText(this.invitationLink);
+      this.$notify({
+        title: 'Успіх',
+        message: 'Посилання успішно скопійовано',
+        type: 'success',
+        showClose: false
+      });
     }
   }
 };
