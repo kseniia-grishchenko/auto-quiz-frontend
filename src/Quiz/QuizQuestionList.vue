@@ -30,9 +30,7 @@
     <div v-else class="no-questions">
       В цьому квізі ще немає питань
     </div>
-    <el-dialog :visible="createModalOpened" top="20vh" @close="$emit('close-create-modal')">
-      <create-question-modal v-on="$listeners"></create-question-modal>
-    </el-dialog>
+    <create-question-modal :visible="createModalOpened" v-on="$listeners" @close="$emit('close-create-modal')"></create-question-modal>
   </div>
 </template>
 
