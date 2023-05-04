@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { getRequest } from '../api.js';
 import NavHeader from '../comps/NavHeader.vue';
 import QuizQuestionList from './QuizQuestionList.vue';
 
@@ -42,6 +43,21 @@ export default {
       if (!match) return;
       this.subjectId = Number(match[1]);
       this.quizId = Number(match[2]);
+    }
+  },
+  watch: {
+    async quizId () {
+      this.quiz = {};
+      try {
+        const { data: quiz } = await getRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}`);
+        this.quiz = quiz;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     }
   },
   mounted () {
