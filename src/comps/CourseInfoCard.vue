@@ -11,7 +11,7 @@
     <div>
       <span>Предмет:</span>
       <div class="action-section">
-        <span>{{subject}}</span>
+        <span>{{course.subject.name}}</span>
       </div>
     </div>
     <div>
@@ -43,8 +43,7 @@ export default {
     editedName: ''
   }),
   props: {
-    course: Object,
-    subject: String
+    course: Object
   },
   methods: {
     async copyToken () {

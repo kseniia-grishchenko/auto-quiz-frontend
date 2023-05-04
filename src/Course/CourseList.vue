@@ -7,20 +7,23 @@
       </el-button>
     </el-row>
     <div class="list">
-      <el-card
+      <div
         v-for="(course, index) in courses"
-        :key="index"
-        class="course-card"
-      >
-        <div
-          slot="header"
-          class="header"
-          :style="{backgroundColor: colors[index % 5]}"
+        @click="redirectToCourse(course.id)"
+        :key="index">
+        <el-card
+          class="course-card"
         >
-          <span>{{course.name}}</span>
-          <div class="details" @click="courseActive = course"><i class="el-icon-more"></i></div>
-        </div>
-      </el-card>
+          <div
+            slot="header"
+            class="header"
+            :style="{backgroundColor: colors[index % 5]}"
+          >
+            <span>{{course.name}}</span>
+            <div class="details" @click.stop="courseActive = course"><i class="el-icon-more"></i></div>
+          </div>
+        </el-card>
+      </div>
     </div>
     <el-dialog
       :visible.sync="modalOpened"
@@ -64,7 +67,6 @@
       <course-info-card
         v-if="courseActive"
         :course="courseActive"
-        :subject="courseSubject"
         @edit-course-name="editCourseName"
         @delete-course="deleteCourse"
       >
@@ -104,13 +106,12 @@ export default {
       '#6A4C93'
     ]
   }),
-  computed: {
-    courseSubject () {
-      if (!this.courseActive) return;
-      return this.subjects.find(subject => subject.id === this.courseActive.subject).name;
-    }
-  },
   methods: {
+    redirectToCourse (id) {
+      console.log(id);
+      location.hash = `#/courses/${id}`;
+    },
+
     async editCourseName ({ id, name }) {
       try {
         const { data: courseActive } = await patchRequest(`/api/courses/${id}/`, {
