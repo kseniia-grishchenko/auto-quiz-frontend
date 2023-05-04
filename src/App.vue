@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-aside v-if="showAside" width="auto">
-        <nav-menu :hash="hash"></nav-menu>
+        <nav-menu :hash="hash" @sign-out="logOut"></nav-menu>
       </el-aside>
       <el-container v-show="showDefaultHeader">
         <el-header>
@@ -51,7 +51,7 @@ export default {
     },
 
     showDefaultHeader () {
-      return this.hash.match(/#\/sign-in|sign-up|subjects$|courses$|join-subject/);
+      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject/);
     }
   },
   methods: {
@@ -80,6 +80,7 @@ export default {
       localStorage.removeItem('refresh');
 
       this.user = null;
+      location.hash = '#/sign-in';
     },
 
     async fetchUser () {

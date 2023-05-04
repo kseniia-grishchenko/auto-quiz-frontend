@@ -140,7 +140,7 @@ export default {
     },
 
     hashHandler () {
-      this.active = !!location.hash.match('subjects$');
+      this.active = !!location.hash.match(/#\/$|subjects$/);
     },
 
     async fetchSubjects () {
