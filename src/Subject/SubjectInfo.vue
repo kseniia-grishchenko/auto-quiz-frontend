@@ -6,7 +6,7 @@
     </div>
     <div>
       <span>Вчителі:</span>
-      <span>{{subject.teachers}}</span>
+      <span>{{teacherList}}</span>
     </div>
     <div>
       <span>Запрошувальне посилання:</span>
@@ -21,6 +21,13 @@ export default {
     subject: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    teacherList () {
+      return (this.subject.teachers || [])
+        .map(teacher => `${teacher.first_name} ${teacher.last_name}`)
+        .join(', ');
     }
   }
 };
