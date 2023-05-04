@@ -2,13 +2,13 @@
   <div>
     <h3>Запрошувальне посилання</h3>
     <div class="invitation-token">
-      <span>{{invitationToken}}</span>
+      <span>{{invitationLink}}</span>
       <i class="el-icon-document-copy" @click="copyToken"></i>
     </div>
     <el-alert
       ref="alertEl"
       :style="{display: 'none'}"
-      :title="'Copied ' + invitationToken"
+      :title="'Copied ' + invitationLink"
       :closable="false"
       type="success">
     </el-alert>
@@ -18,7 +18,7 @@
 <script>
 export default {
   props: {
-    invitationToken: {
+    invitationLink: {
       type: String,
       default: ''
     }
@@ -27,7 +27,7 @@ export default {
     async copyToken () {
       this.alertEl = this.$refs.alertEl.$el;
 
-      await navigator.clipboard.writeText(this.invitationToken);
+      await navigator.clipboard.writeText(this.invitationLink);
       this.alertEl.style.display = 'initial';
 
       setTimeout(() => {

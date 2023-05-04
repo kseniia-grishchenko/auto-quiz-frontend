@@ -51,8 +51,8 @@
       :visible="!!createdCourse"
       top="30vh"
       @close="createdCourse = null">
-      <invitation-token-card :invitationToken="createdCourse.invitation_token">
-      </invitation-token-card>
+      <invitation-link-card :invitationLink="createdCourse.invitation_token">
+      </invitation-link-card>
     </el-dialog>
     <el-dialog
       :visible="!!courseActive"
@@ -81,7 +81,7 @@ import {
   deleteRequest
 } from '../api.js';
 import CourseInfoCard from '../comps/CourseInfoCard.vue';
-import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
+import InvitationLinkCard from '../comps/InvitationLinkCard.vue';
 
 export default {
   data: () => ({
@@ -212,7 +212,7 @@ export default {
   },
   components: {
     CourseInfoCard,
-    InvitationTokenCard
+    InvitationLinkCard
   }
 };
 </script>
