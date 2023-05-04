@@ -3,7 +3,7 @@
     <el-row>
       <create-btn
         title="питання"
-        @click="$emit('open-create-modal')"></create-btn>
+        @click="createModalOpened = true"></create-btn>
     </el-row>
     <el-table
       v-if="questions.length"
@@ -23,46 +23,112 @@
         <el-button
           class="quiz-action"
           size="mini"
-          @click="handleQuestionRedirect(scope.row)">Редагувати</el-button>
+          @click.stop="questionToEdit = scope.row">Редагувати</el-button>
+        <el-button
+          class="quiz-action"
+          size="mini"
+          type="danger"
+          @click.stop="questionToDelete = scope.row">Видалити</el-button>
       </template>
     </el-table-column>
     </el-table>
     <div v-else class="no-questions">
       В цьому квізі ще немає питань
     </div>
-    <create-question-modal :visible="createModalOpened" v-on="$listeners" @close="$emit('close-create-modal')"></create-question-modal>
+    <create-question-modal
+      :visible="createModalOpened"
+      @create-question="createQuestion"
+      @close="$emit('close-create-modal')"
+    ></create-question-modal>
+    <edit-question-modal
+      :visible="!!questionToEdit"
+      :question="questionToEdit"
+      @edit-question="editQuestion"
+      @close="questionToEdit = null"
+    ></edit-question-modal>
   </div>
 </template>
 
 <script>
+import { getRequest, postRequest, patchRequest } from '../api.js';
 import CreateBtn from '../comps/CreateBtn.vue';
 import CreateQuestionModal from './CreateQuestionModal.vue';
+import EditQuestionModal from './EditQuestionModal.vue';
 
 export default {
+  data: () => ({
+    questions: [],
+    questionToEdit: null,
+    questionToDelete: null,
+    createModalOpened: false
+  }),
   props: {
     subjectId: {
       type: Number
     },
     quizId: {
       type: Number
-    },
-    questions: {
-      type: Array,
-      default: () => []
-    },
-    createModalOpened: {
-      type: Boolean,
-      default: false
     }
   },
   methods: {
     handleQuestionRedirect (question) {
       location.hash = `#/subjects/${this.subjectId}/quiz/${this.quizId}/question/${question.id}`;
+    },
+
+    async fetchQuestions () {
+      const { data: questions } = await getRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}/questions`);
+      this.questions = questions;
+    },
+
+    async createQuestion (form) {
+      try {
+        await postRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}/questions/`, {
+          title: form.title,
+          expected_answer: form.expectedAnswer,
+          value: form.value
+        });
+        this.fetchQuestions();
+        this.createModalOpened = false;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
+    },
+
+    async editQuestion (form) {
+      try {
+        await patchRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizId}/questions/${form.id}/`, {
+          title: form.title,
+          expected_answer: form.expected_answer,
+          value: form.value
+        });
+        this.fetchQuestions();
+        this.questionToEdit = null;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
+    }
+  },
+  watch: {
+    quizId: {
+      handler (id) {
+        if (!id) return;
+        this.fetchQuestions();
+      },
+      immediate: true
     }
   },
   components: {
     CreateBtn,
-    CreateQuestionModal
+    CreateQuestionModal,
+    EditQuestionModal
   }
 };
 </script>
