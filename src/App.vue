@@ -18,7 +18,7 @@
       </el-container>
       <subject-view v-if="user && !showDefaultHeader"></subject-view>
       <quiz-view v-if="user && !showDefaultHeader"></quiz-view>
-      <course-view v-if="user && !showDefaultHeader"></course-view>
+      <course-view v-if="user && !showDefaultHeader" :user="user"></course-view>
     </el-container>
   </div>
 </template>
