@@ -14,9 +14,7 @@
 </template>
 
 <script>
-import {
-  getRequest
-} from '../api.js';
+import { getRequest } from '../api.js';
 import NavHeader from '../comps/NavHeader.vue';
 import SubjectInfo from './SubjectInfo.vue';
 import SubjectQuizList from './SubjectQuizList.vue';
