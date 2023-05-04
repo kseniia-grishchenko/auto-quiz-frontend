@@ -79,9 +79,9 @@ import {
   postRequest,
   patchRequest,
   deleteRequest
-} from '../../api.js';
-import CourseInfoCard from '../../comps/CourseInfoCard.vue';
-import InvitationTokenCard from '../../comps/InvitationTokenCard.vue';
+} from '../api.js';
+import CourseInfoCard from '../comps/CourseInfoCard.vue';
+import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({
@@ -234,13 +234,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-  h3 {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    margin-bottom: 8px;
-  }
-
   span {
     font-size: 18px;
     font-weight: 500;

@@ -8,6 +8,7 @@
     <el-table
       v-if="quizzes.length"
       :data="quizzes"
+      @cell-click="handleQuizRedirect"
       :style="{
         width: '100%',
         fontSize: '20px',
@@ -23,12 +24,12 @@
         <el-button
           class="quiz-action"
           size="mini"
-          @click="quizToEdit = scope.row">Редагувати</el-button>
+          @click.stop="quizToEdit = scope.row">Редагувати</el-button>
         <el-button
           class="quiz-action"
           size="mini"
           type="danger"
-          @click="quizToDelete = scope.row">Видалити</el-button>
+          @click.stop="quizToDelete = scope.row">Видалити</el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -48,26 +49,18 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible="!!quizToEdit" top="30vh" v-if="quizToEdit" @close="quizToEdit = null">
-      <el-form ref="form" :model="quizToEdit" class="input-section">
-        <h3>Назва</h3>
-        <el-form-item>
-          <el-input placeholder="Введіть назву..." v-model="quizToEdit.name"></el-input>
-        </el-form-item>
-        <h3>Тривалість</h3>
-        <el-input-number v-model="quizToEdit.max_duration" :min="1"></el-input-number>
-        <el-form-item>
-          <el-button type="primary" class="action" @click="editQuiz">Зберегти</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <el-dialog :visible="!!quizToDelete" top="30vh" v-if="quizToDelete" @close="quizToDelete = null">
-      <h3>Ви впевнені що хочете видалити цей квіз?</h3>
-      <el-row>
-        <el-button class="quiz-action" @click="deleteQuiz" type="danger">Так</el-button>
-        <el-button class="quiz-action" @click="quizToDelete = null">Ні</el-button>
-      </el-row>
-    </el-dialog>
+    <edit-quiz-modal
+      :visible="!!quizToEdit"
+      :quiz="quizToEdit"
+      @close="quizToEdit = null"
+      @edit-quiz="editQuiz"
+    >
+    </edit-quiz-modal>
+    <delete-quiz-modal
+      :visible="!!quizToDelete"
+      @close="quizToDelete = null"
+      @delete-quiz="deleteQuiz"
+    ></delete-quiz-modal>
   </div>
 </template>
 
@@ -77,8 +70,10 @@ import {
   getRequest,
   patchRequest,
   postRequest
-} from '../../api.js';
-import CreateBtn from '../../comps/CreateBtn.vue';
+} from '../api.js';
+import CreateBtn from '../comps/CreateBtn.vue';
+import EditQuizModal from './EditQuizModal.vue';
+import DeleteQuizModal from './DeleteQuizModal.vue';
 
 export default {
   data: () => ({
@@ -93,6 +88,10 @@ export default {
     }
   }),
   methods: {
+    handleQuizRedirect (quiz) {
+      location.hash = `#/subjects/${this.subjectId}/quiz/${quiz.id}`;
+    },
+
     async createQuiz () {
       try {
         await postRequest(`/api/subjects/${this.subjectId}/quizzes/`, {
@@ -110,7 +109,8 @@ export default {
       }
     },
 
-    async  editQuiz () {
+    async  editQuiz (editedQuiz) {
+      this.quizToEdit = editedQuiz;
       try {
         await patchRequest(`/api/subjects/${this.subjectId}/quizzes/${this.quizToEdit.id}/`, {
           name: this.quizToEdit.name,
@@ -142,12 +142,20 @@ export default {
     },
 
     async fetchQuizzes () {
-      const { data: quizzes } = await getRequest(`/api/subjects/${this.subjectId}/quizzes`);
-      this.quizzes = quizzes;
+      try {
+        const { data: quizzes } = await getRequest(`/api/subjects/${this.subjectId}/quizzes`);
+        this.quizzes = quizzes;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     },
 
     hashHandler () {
-      const match = location.hash.match(/#\/subjects\?id=(\d+)/);
+      const match = location.hash.match(/#\/subjects\/(\d+)/);
       if (!match) return;
       this.subjectId = Number(match[1]);
     }
@@ -164,7 +172,11 @@ export default {
   beforeDestroy () {
     window.removeEventListener('hashchange', this.hashHandler);
   },
-  components: { CreateBtn }
+  components: {
+    CreateBtn,
+    EditQuizModal,
+    DeleteQuizModal
+  }
 };
 </script>
 
@@ -187,13 +199,6 @@ export default {
 .no-quizzes {
   padding: 12px 0;
   font-size: 20px;
-}
-
-h3 {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  margin-bottom: 8px;
 }
 
 .quiz-action {

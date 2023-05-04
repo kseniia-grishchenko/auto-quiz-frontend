@@ -16,6 +16,7 @@
         </el-main>
       </el-container>
       <subject-view v-if="user && !showDefaultHeader"></subject-view>
+      <quiz-view v-if="user && !showDefaultHeader"></quiz-view>
     </el-container>
   </div>
 </template>
@@ -31,9 +32,10 @@ import NavMenu from './comps/NavMenu.vue';
 import HeaderComp from './comps/HeaderComp.vue';
 import SignUp from './views/SignUp.vue';
 import SignIn from './views/SignIn.vue';
-import SubjectList from './views/Subject/SubjectList.vue';
-import CourseList from './views/Course/CourseList.vue';
-import SubjectView from './views/Subject/SubjectView.vue';
+import SubjectList from './Subject/SubjectList.vue';
+import CourseList from './Course/CourseList.vue';
+import SubjectView from './Subject/SubjectView.vue';
+import QuizView from './Quiz/QuizView.vue';
 
 export default {
   data: () => ({
@@ -129,7 +131,8 @@ export default {
     SignIn,
     SubjectList,
     CourseList,
-    SubjectView
+    SubjectView,
+    QuizView
   }
 };
 </script>

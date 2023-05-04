@@ -66,9 +66,9 @@ import {
   postRequest,
   putRequest,
   deleteRequest
-} from '../../api.js';
-import SubjectInfoCard from '../../comps/SubjectInfoCard.vue';
-import InvitationTokenCard from '../../comps/InvitationTokenCard.vue';
+} from '../api.js';
+import SubjectInfoCard from '../comps/SubjectInfoCard.vue';
+import InvitationTokenCard from '../comps/InvitationTokenCard.vue';
 
 export default {
   data: () => ({
@@ -91,7 +91,7 @@ export default {
   }),
   methods: {
     redirectToSubject (id) {
-      location.hash = `#/subjects?id=${id}`;
+      location.hash = `#/subjects/${id}`;
     },
 
     handleCardClick (subject) {
@@ -200,13 +200,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-  h3 {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    margin-bottom: 8px;
-  }
-
   span {
     font-size: 18px;
     font-weight: 500;

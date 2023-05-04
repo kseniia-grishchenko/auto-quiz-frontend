@@ -40,14 +40,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
-
-h3 {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  margin-bottom: 8px;
-}
-
 .invitation-token {
   background-color: $secondary-bg;
   padding: 16px 12px;

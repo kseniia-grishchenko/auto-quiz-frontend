@@ -16,8 +16,8 @@
 <script>
 import {
   getRequest
-} from '../../api.js';
-import NavHeader from '../../comps/NavHeader.vue';
+} from '../api.js';
+import NavHeader from '../comps/NavHeader.vue';
 import SubjectInfo from './SubjectInfo.vue';
 import SubjectQuizList from './SubjectQuizList.vue';
 
@@ -33,31 +33,39 @@ export default {
       return [
         {
           title: 'Квізи',
-          link: `#/subjects?id=${this.id}`
+          link: `#/subjects/${this.id}`
         },
         {
           title: 'Інформація',
-          link: `#/subjects?id=${this.id}&info=true`
+          link: `#/subjects/${this.id}?info=true`
         }
       ];
     },
     subjectInfoActive () {
-      return this.hash.match(/info=true/);
+      return !!this.hash.match(/info=true/);
     }
   },
   methods: {
     hashHandler () {
       this.hash = location.hash;
-      const match = location.hash.match(/#\/subjects\?id=(\d+)/);
+      const match = location.hash.match(/#\/subjects\/(\d+)$/);
+      this.active = !!match;
       if (!match) return;
-      this.active = !!match[0];
       this.id = Number(match[1]);
     }
   },
   watch: {
     async id (id) {
-      const { data: subject } = await getRequest(`/api/subjects/${id}`);
-      this.subject = subject;
+      try {
+        const { data: subject } = await getRequest(`/api/subjects/${id}`);
+        this.subject = subject;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     }
   },
   mounted () {
