@@ -4,7 +4,17 @@
       <nav-header :title="course.name" :navItems="navItems" :hash="hash"></nav-header>
     </el-header>
     <el-main>
-      <course-task-list :course="course" :user="user"></course-task-list>
+      <course-info
+        v-if="courseInfoActive"
+        :course="course"
+        :user="user"
+        @refresh-course-info="fetchCourse"
+      ></course-info>
+      <course-task-list
+        v-else
+        :course="course"
+        :user="user"
+      ></course-task-list>
     </el-main>
   </el-container>
 </template>
@@ -14,6 +24,7 @@ import { getRequest } from '../api.js';
 
 import NavHeader from '../comps/NavHeader.vue';
 import CourseTaskList from './CourseTaskList.vue';
+import CourseInfo from './CourseInfo.vue';
 
 export default {
   data: () => ({
@@ -42,7 +53,7 @@ export default {
       ];
     },
     courseInfoActive () {
-      return !!this.hash.match(/#\/courses\/(\d+)?info=true/);
+      return !!this.hash.match(/#\/courses\/(\d+)\?info=true/);
     }
   },
   methods: {
@@ -52,12 +63,11 @@ export default {
       this.active = !!match;
       if (!match) return;
       this.id = Number(match[1]);
-    }
-  },
-  watch: {
-    async id (id) {
+    },
+
+    async fetchCourse () {
       try {
-        const { data: course } = await getRequest(`/api/courses/${id}`);
+        const { data: course } = await getRequest(`/api/courses/${this.id}`);
         this.course = course;
       } catch (err) {
         this.$notify.error({
@@ -66,6 +76,11 @@ export default {
           showClose: false
         });
       }
+    }
+  },
+  watch: {
+    id () {
+      this.fetchCourse();
     }
   },
   mounted () {
@@ -77,7 +92,8 @@ export default {
   },
   components: {
     NavHeader,
-    CourseTaskList
+    CourseTaskList,
+    CourseInfo
   }
 };
 </script>
