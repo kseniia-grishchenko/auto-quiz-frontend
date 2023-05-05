@@ -24,12 +24,12 @@
         <el-button
           class="task-action"
           size="mini"
-          @click.stop="quizToEdit = scope.row">Редагувати</el-button>
+          @click.stop="taskToEdit = {...scope.row}">Редагувати</el-button>
         <el-button
           class="task-action"
           size="mini"
           type="danger"
-          @click.stop="quizToDelete = scope.row">Видалити</el-button>
+          @click.stop="taskToDelete = {...scope.row}">Видалити</el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -66,16 +66,16 @@
       </el-form>
     </el-dialog>
     <edit-task-modal
-      :visible="!!quizToEdit"
-      :task="quizToEdit"
-      @close="quizToEdit = null"
-      @edit-task="editQuiz"
+      :visible="!!taskToEdit"
+      :task="taskToEdit"
+      @close="taskToEdit = null"
+      @edit-task="editTask"
     >
     </edit-task-modal>
     <delete-task-modal
-      :visible="!!quizToDelete"
-      @close="quizToDelete = null"
-      @delete-task="deleteQuiz"
+      :visible="!!taskToDelete"
+      @close="taskToDelete = null"
+      @delete-task="deleteTask"
     ></delete-task-modal>
   </div>
 </template>
@@ -94,8 +94,8 @@ import DeleteTaskModal from './DeleteTaskModal.vue';
 export default {
   data: () => ({
     createModalOpened: false,
-    quizToEdit: null,
-    quizToDelete: null,
+    taskToEdit: null,
+    taskToDelete: null,
     tasks: [],
     quizzes: [],
     form: {
@@ -144,15 +144,15 @@ export default {
       }
     },
 
-    async  editQuiz (editedQuiz) {
-      this.quizToEdit = editedQuiz;
+    async  editTask (editedTask) {
+      this.taskToEdit = editedTask;
       try {
-        await patchRequest(`/api/courses/${this.course.id}/tasks/${this.quizToEdit.id}/`, {
-          name: this.quizToEdit.name,
-          max_duration: this.quizToEdit.max_duration
+        await patchRequest(`/api/courses/${this.course.id}/tasks/${this.taskToEdit.id}/`, {
+          title: this.taskToEdit.title,
+          deadline: this.taskToEdit.deadline
         });
         this.fetchTasks();
-        this.quizToEdit = null;
+        this.taskToEdit = null;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -162,11 +162,11 @@ export default {
       }
     },
 
-    async deleteQuiz () {
+    async deleteTask () {
       try {
-        await deleteRequest(`/api/courses/${this.course.id}/tasks/${this.quizToDelete.id}/`);
+        await deleteRequest(`/api/courses/${this.course.id}/tasks/${this.taskToDelete.id}/`);
         this.fetchTasks();
-        this.quizToDelete = null;
+        this.taskToDelete = null;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
