@@ -85,7 +85,7 @@ export default {
       }));
     },
     invitationLink () {
-      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.course.invitation_token}`;
+      return `${import.meta.env.VITE_APP_URL}/#/join-course/${this.course.invitation_token}`;
     },
     userRole () {
       const currentUser = this.course.users.find(({ user }) => user.id === this.user.id);
