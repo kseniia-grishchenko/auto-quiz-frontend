@@ -14,6 +14,7 @@
           <subject-list v-if="user"></subject-list>
           <course-list v-if="user"></course-list>
           <join-subject></join-subject>
+          <join-course></join-course>
         </el-main>
       </el-container>
       <subject-view v-if="user && !showDefaultHeader"></subject-view>
@@ -40,6 +41,7 @@ import SubjectView from './Subject/SubjectView.vue';
 import QuizView from './Quiz/QuizView.vue';
 import CourseView from './Course/CourseView.vue';
 import JoinSubject from './JoinSubject/JoinSubject.vue';
+import JoinCourse from './JoinCourse/JoinCourse.vue';
 
 export default {
   data: () => ({
@@ -49,11 +51,11 @@ export default {
   }),
   computed: {
     showAside () {
-      return !this.hash.match(/sign-up|sign-in|join-subject/);
+      return !this.hash.match(/sign-up|sign-in|join-subject|join-course/);
     },
 
     showDefaultHeader () {
-      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject/);
+      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject|join-course/);
     }
   },
   methods: {
@@ -139,7 +141,8 @@ export default {
     SubjectView,
     QuizView,
     CourseView,
-    JoinSubject
+    JoinSubject,
+    JoinCourse
   }
 };
 </script>
