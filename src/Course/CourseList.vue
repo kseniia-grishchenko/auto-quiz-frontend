@@ -108,7 +108,6 @@ export default {
   }),
   methods: {
     redirectToCourse (id) {
-      console.log(id);
       location.hash = `#/courses/${id}`;
     },
 

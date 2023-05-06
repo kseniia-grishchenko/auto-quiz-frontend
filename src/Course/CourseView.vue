@@ -1,62 +1,74 @@
 <template>
   <el-container v-if="active">
     <el-header>
-      <nav-header :title="subject.name" :navItems="navItems" :hash="hash"></nav-header>
+      <nav-header :title="course.name" :navItems="navItems" :hash="hash"></nav-header>
     </el-header>
     <el-main>
-      <subject-info :subject="subject" v-if="subjectInfoActive"></subject-info>
-      <subject-quiz-list
+      <course-info
+        v-if="courseInfoActive"
+        :course="course"
+        :user="user"
+        @refresh-course-info="fetchCourse"
+      ></course-info>
+      <course-task-list
         v-else
-        :subjectId="id">
-      </subject-quiz-list>
+        :course="course"
+        :user="user"
+      ></course-task-list>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import { getRequest } from '../api.js';
+
 import NavHeader from '../comps/NavHeader.vue';
-import SubjectInfo from './SubjectInfo.vue';
-import SubjectQuizList from './SubjectQuizList.vue';
+import CourseTaskList from './CourseTaskList.vue';
+import CourseInfo from './CourseInfo.vue';
 
 export default {
   data: () => ({
     hash: '',
     id: null,
-    subject: {},
+    course: {},
     active: false
   }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
     navItems () {
       return [
         {
-          title: 'Квізи',
-          link: `#/subjects/${this.id}`
+          title: 'Завдання',
+          link: `#/courses/${this.id}`
         },
         {
           title: 'Інформація',
-          link: `#/subjects/${this.id}?info=true`
+          link: `#/courses/${this.id}?info=true`
         }
       ];
     },
-    subjectInfoActive () {
-      return !!this.hash.match(/info=true/);
+    courseInfoActive () {
+      return !!this.hash.match(/#\/courses\/(\d+)\?info=true/);
     }
   },
   methods: {
     hashHandler () {
       this.hash = location.hash;
-      const match = location.hash.match(/#\/subjects\/(\d+)/);
+      const match = location.hash.match(/#\/courses\/(\d+)/);
       this.active = !!match;
       if (!match) return;
       this.id = Number(match[1]);
-    }
-  },
-  watch: {
-    async id (id) {
+    },
+
+    async fetchCourse () {
       try {
-        const { data: subject } = await getRequest(`/api/subjects/${id}`);
-        this.subject = subject;
+        const { data: course } = await getRequest(`/api/courses/${this.id}`);
+        this.course = course;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -64,6 +76,11 @@ export default {
           showClose: false
         });
       }
+    }
+  },
+  watch: {
+    id () {
+      this.fetchCourse();
     }
   },
   mounted () {
@@ -75,12 +92,12 @@ export default {
   },
   components: {
     NavHeader,
-    SubjectInfo,
-    SubjectQuizList
+    CourseTaskList,
+    CourseInfo
   }
 };
 </script>
 
-<style>
+<style lang="sass" scoped>
 
 </style>
