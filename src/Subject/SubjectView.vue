@@ -1,7 +1,7 @@
 <template>
   <el-container v-if="active">
     <el-header>
-      <nav-header :title="subject.name" :navItems="navItems" :hash="hash"></nav-header>
+      <nav-header :title="subject.name" :navItems="navItems" :hash="hash" v-on="$listeners" :user="user"></nav-header>
     </el-header>
     <el-main>
       <subject-info :subject="subject" v-if="subjectInfoActive"></subject-info>
@@ -26,6 +26,12 @@ export default {
     subject: {},
     active: false
   }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
     navItems () {
       return [

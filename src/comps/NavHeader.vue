@@ -12,11 +12,14 @@
       </div>
     </div>
     <div></div>
+    <action-popover v-on="$listeners" :user="user"></action-popover>
   </div>
 </template>
 
 <script>
+import ActionPopover from './ActionPopover.vue';
 export default {
+  components: { ActionPopover },
   props: {
     hash: {
       type: String,
@@ -29,14 +32,15 @@ export default {
     navItems: {
       type: Array,
       default: () => []
+    },
+    user: {
+      type: Object,
+      default: () => {}
     }
   }
 };
 </script>
 
-<style lang="scss">
-@import '../assets/variables.scss';
-</style>
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
 
@@ -90,5 +94,11 @@ export default {
     }
   }
 
+  .action-container {
+    position: absolute;
+    right: 40px;
+    top: 14px;
+    cursor: pointer;
+  }
 }
 </style>

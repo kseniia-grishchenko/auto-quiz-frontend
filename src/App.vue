@@ -2,11 +2,11 @@
   <div id="app">
     <el-container>
       <el-aside v-if="showAside" width="auto">
-        <nav-menu :hash="hash" @sign-out="logOut"></nav-menu>
+        <nav-menu :hash="hash"></nav-menu>
       </el-aside>
       <el-container v-show="showDefaultHeader">
         <el-header>
-          <header-comp :hash="hash"></header-comp>
+          <header-comp :hash="hash" @sign-out="logOut" :user="user"></header-comp>
         </el-header>
         <el-main>
           <sign-up v-if="!user"></sign-up>
@@ -15,11 +15,12 @@
           <course-list v-if="user"></course-list>
           <join-subject></join-subject>
           <join-course></join-course>
+          <user-profile v-if="user" :user="user" @refresh-user="fetchUser"></user-profile>
         </el-main>
       </el-container>
-      <subject-view v-if="user && !showDefaultHeader"></subject-view>
-      <quiz-view v-if="user && !showDefaultHeader"></quiz-view>
-      <course-view v-if="user && !showDefaultHeader" :user="user"></course-view>
+      <subject-view v-if="user && !showDefaultHeader" @sign-out="logOut" :user="user"></subject-view>
+      <quiz-view v-if="user && !showDefaultHeader" @sign-out="logOut" :user="user"></quiz-view>
+      <course-view v-if="user && !showDefaultHeader" :user="user" @sign-out="logOut"></course-view>
     </el-container>
   </div>
 </template>
@@ -42,6 +43,7 @@ import QuizView from './Quiz/QuizView.vue';
 import CourseView from './Course/CourseView.vue';
 import JoinSubject from './JoinSubject/JoinSubject.vue';
 import JoinCourse from './JoinCourse/JoinCourse.vue';
+import UserProfile from './UserProfile/UserProfile.vue';
 
 export default {
   data: () => ({
@@ -55,7 +57,7 @@ export default {
     },
 
     showDefaultHeader () {
-      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject|join-course/);
+      return this.hash.match(/#\/$|#\/sign-in|sign-up|subjects$|courses$|join-subject|join-course|profile/);
     }
   },
   methods: {
@@ -142,7 +144,8 @@ export default {
     QuizView,
     CourseView,
     JoinSubject,
-    JoinCourse
+    JoinCourse,
+    UserProfile
   }
 };
 </script>
