@@ -2,11 +2,11 @@
   <div id="app">
     <el-container>
       <el-aside v-if="showAside" width="auto">
-        <nav-menu :hash="hash" @sign-out="logOut"></nav-menu>
+        <nav-menu :hash="hash"></nav-menu>
       </el-aside>
       <el-container v-show="showDefaultHeader">
         <el-header>
-          <header-comp :hash="hash"></header-comp>
+          <header-comp :hash="hash" @sign-out="logOut"></header-comp>
         </el-header>
         <el-main>
           <sign-up v-if="!user"></sign-up>
@@ -17,9 +17,9 @@
           <join-course></join-course>
         </el-main>
       </el-container>
-      <subject-view v-if="user && !showDefaultHeader"></subject-view>
-      <quiz-view v-if="user && !showDefaultHeader"></quiz-view>
-      <course-view v-if="user && !showDefaultHeader" :user="user"></course-view>
+      <subject-view v-if="user && !showDefaultHeader" @sign-out="logOut"></subject-view>
+      <quiz-view v-if="user && !showDefaultHeader" @sign-out="logOut"></quiz-view>
+      <course-view v-if="user && !showDefaultHeader" :user="user" @sign-out="logOut"></course-view>
     </el-container>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <el-container v-if="active">
     <el-header>
-      <nav-header :title="quiz.name" :navItems="navItems" :hash="hash"></nav-header>
+      <nav-header :title="quiz.name" :navItems="navItems" :hash="hash" v-on="$listeners"></nav-header>
     </el-header>
     <el-main>
       <quiz-question-list
