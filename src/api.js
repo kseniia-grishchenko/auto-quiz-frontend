@@ -59,6 +59,17 @@ const patchRequest = async (uri, payload = {}) => {
     .then((response) => response);
 };
 
+const patchRequestWithFormData = async (uri, formData) => {
+  return axios.patch(uri,
+    formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem('access')}`
+      }
+    })
+    .then((response) => response);
+};
+
 const deleteRequest = async (uri) => {
   return axios.delete(uri,
     {
@@ -77,5 +88,6 @@ export {
   postRequestUnauthorized,
   putRequest,
   patchRequest,
+  patchRequestWithFormData,
   deleteRequest
 };
