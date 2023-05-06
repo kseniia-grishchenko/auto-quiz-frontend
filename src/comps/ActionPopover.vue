@@ -11,7 +11,8 @@
       </el-link>
       <el-button @click="$emit('sign-out')">Вийти</el-button>
     </div>
-    <svg slot="reference" @click="popoverVisible = !popoverVisible" class="avatar" width="26" height="26" viewbox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <img v-if="user?.profile_image" slot="reference" @click="popoverVisible = !popoverVisible" class="avatar" :src="user?.profile_image"/>
+    <svg v-else slot="reference" @click="popoverVisible = !popoverVisible" class="avatar" width="26" height="26" viewbox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
       <use href="/assets/icons/avatar.svg#avatar"></use>
     </svg>
   </el-popover>
@@ -21,7 +22,13 @@
 export default {
   data: () => ({
     popoverVisible: false
-  })
+  }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  }
 };
 </script>
 
@@ -47,6 +54,9 @@ export default {
   .avatar {
     color: $main-font;
     cursor: pointer;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
   }
 }
 </style>

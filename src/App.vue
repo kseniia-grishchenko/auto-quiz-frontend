@@ -6,7 +6,7 @@
       </el-aside>
       <el-container v-show="showDefaultHeader">
         <el-header>
-          <header-comp :hash="hash" @sign-out="logOut"></header-comp>
+          <header-comp :hash="hash" @sign-out="logOut" :user="user"></header-comp>
         </el-header>
         <el-main>
           <sign-up v-if="!user"></sign-up>
@@ -18,8 +18,8 @@
           <user-profile v-if="user" :user="user" @refresh-user="fetchUser"></user-profile>
         </el-main>
       </el-container>
-      <subject-view v-if="user && !showDefaultHeader" @sign-out="logOut"></subject-view>
-      <quiz-view v-if="user && !showDefaultHeader" @sign-out="logOut"></quiz-view>
+      <subject-view v-if="user && !showDefaultHeader" @sign-out="logOut" :user="user"></subject-view>
+      <quiz-view v-if="user && !showDefaultHeader" @sign-out="logOut" :user="user"></quiz-view>
       <course-view v-if="user && !showDefaultHeader" :user="user" @sign-out="logOut"></course-view>
     </el-container>
   </div>

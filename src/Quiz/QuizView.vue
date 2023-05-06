@@ -1,7 +1,7 @@
 <template>
   <el-container v-if="active">
     <el-header>
-      <nav-header :title="quiz.name" :navItems="navItems" :hash="hash" v-on="$listeners"></nav-header>
+      <nav-header :title="quiz.name" :navItems="navItems" :hash="hash" v-on="$listeners" :user="user"></nav-header>
     </el-header>
     <el-main>
       <quiz-question-list
@@ -25,6 +25,12 @@ export default {
     quiz: {},
     active: false
   }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
     navItems () {
       return [

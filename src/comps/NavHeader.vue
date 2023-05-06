@@ -12,7 +12,7 @@
       </div>
     </div>
     <div></div>
-    <action-popover v-on="$listeners"></action-popover>
+    <action-popover v-on="$listeners" :user="user"></action-popover>
   </div>
 </template>
 
@@ -32,6 +32,10 @@ export default {
     navItems: {
       type: Array,
       default: () => []
+    },
+    user: {
+      type: Object,
+      default: () => {}
     }
   }
 };
@@ -93,7 +97,7 @@ export default {
   .action-container {
     position: absolute;
     right: 40px;
-    top: 20px;
+    top: 14px;
     cursor: pointer;
   }
 }

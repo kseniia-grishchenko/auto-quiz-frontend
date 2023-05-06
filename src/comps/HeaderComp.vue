@@ -4,7 +4,7 @@
       <img src="/assets/icons/logo.png">
       <span>SIGMA SCHOOL</span>
     </div>
-    <action-popover v-on="$listeners"></action-popover>
+    <action-popover v-on="$listeners" :user="user"></action-popover>
   </div>
 </template>
 
@@ -14,6 +14,12 @@ export default {
   data: () => ({
     popoverVisible: false
   }),
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   components: { ActionPopover }
 
 };
@@ -41,7 +47,7 @@ export default {
   .action-container {
     position: absolute;
     right: 40px;
-    top: 20px;
+    top: 14px;
   }
 }
 
