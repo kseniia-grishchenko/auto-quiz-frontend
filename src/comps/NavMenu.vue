@@ -59,6 +59,11 @@ export default {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
+
+  .el-menu-item.is-active,
+  .el-menu-item:hover {
+    background-color: #404454;
+  }
 }
 
 .nav-menu .el-menu-item {
@@ -74,11 +79,6 @@ export default {
   font-weight: 500;
   font-size: 18px;
   line-height: 20px;
-}
-
-.el-menu-item.is-active,
-.el-menu-item:hover {
-  background-color: #404454;
 }
 
 .sidebar-title > * {
