@@ -132,6 +132,13 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.question-list {
+  .el-menu-item.is-active {
+    background-color: #e8e9ea;
+  }
+}
+</style>
 <style lang="scss" scoped>
 .question-list {
   height: 100%;
