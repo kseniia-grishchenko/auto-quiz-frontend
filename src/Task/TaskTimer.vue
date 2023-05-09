@@ -42,7 +42,7 @@ export default {
       if (strValue.length < 2) {
         return `0${strValue}`;
       }
-      return value;
+      return strValue;
     },
 
     countdown () {
@@ -53,9 +53,9 @@ export default {
         return;
       }
       const leftSeconds = (this.deadline - Date.now()) / 1e3;
-      this.leftHours = this.twoDigitRepresentation(Math.round(leftSeconds / 60 / 60));
-      this.leftMinutes = this.twoDigitRepresentation(Math.round(leftSeconds / 60));
-      this.leftSeconds = this.twoDigitRepresentation(Math.round(leftSeconds % 60));
+      this.leftHours = this.twoDigitRepresentation(Math.floor(leftSeconds / 60 / 60));
+      this.leftMinutes = this.twoDigitRepresentation(Math.floor(leftSeconds / 60));
+      this.leftSeconds = this.twoDigitRepresentation(Math.floor(leftSeconds % 60));
     }
   },
   mounted () {
