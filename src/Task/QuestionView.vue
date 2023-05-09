@@ -69,6 +69,11 @@ export default {
     }
   },
   watch: {
+    question () {
+      this.editedResult = '';
+      this.editMode = false;
+      this.badSimilarity = false;
+    },
     result: {
       handler (result) {
         this.editedResult = result;

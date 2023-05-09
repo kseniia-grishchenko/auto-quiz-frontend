@@ -6,9 +6,12 @@
       class="start-btn"
       @click="startSession"
     >Розпочати тест</el-button>
-    <div v-else>
-      <task-question-list :courseId="courseId" :sessionId="sessionId" :taskId="taskId"></task-question-list>
-    </div>
+      <task-question-list
+        v-else
+        :courseId="courseId"
+        :sessionId="sessionId"
+        :taskId="taskId">
+      </task-question-list>
   </el-row>
 </template>
 
@@ -18,7 +21,7 @@ import TaskQuestionList from './TaskQuestionList.vue';
 
 export default {
   data: () => ({
-    isAvailable: false,
+    isAvailable: true,
     active: false,
     courseId: null,
     taskId: null,
@@ -80,6 +83,7 @@ export default {
         this.isAvailable = true;
         return;
       };
+      this.isAvailable = false;
       this.sessionId = userSession.id;
     }
   },

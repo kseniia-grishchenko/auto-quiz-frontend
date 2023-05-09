@@ -107,10 +107,12 @@ export default {
     },
 
     selectPreviousQuestion () {
+      this.speech.result = '';
       this.activeQuestionIdx = this.activeQuestionIdx - 1;
     },
 
     selectNextQuestion () {
+      this.speech.result = '';
       this.activeQuestionIdx = this.activeQuestionIdx + 1;
     },
 
@@ -162,22 +164,28 @@ export default {
           showClose: false
         });
       }
+    },
+
+    setup () {
+      this.fetchTaskInfo();
+
+      this.speech = useSpeechRecognition({
+        lang: 'uk-UA',
+        continuous: true
+      });
     }
   },
   watch: {
     sessionId: {
       handler (id) {
         if (!id) return;
-        this.fetchTaskInfo();
-
-        this.speech = useSpeechRecognition({
-          lang: 'uk-UA',
-          continuous: true
-        });
+        this.setup();
       }
     }
   },
-
+  mounted () {
+    this.setup();
+  },
   components: {
     QuestionView,
     QuestionPagination,
