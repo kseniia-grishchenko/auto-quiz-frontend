@@ -1,8 +1,10 @@
 <template>
   <el-row class="content">
     <span>{{question.title}}</span>
-    <el-button v-if="!isListening" type="primary" class="record-response" @click="$emit('record-response')">Записати відповідь</el-button>
-    <el-button v-else type="primary" class="record-response" @click="$emit('stop-recording')">Готово</el-button>
+    <div v-if="!taskFinished">
+      <el-button v-if="!isListening" type="primary" class="record-response" @click="$emit('record-response')">Записати відповідь</el-button>
+      <el-button v-else type="primary" class="record-response" @click="$emit('stop-recording')">Готово</el-button>
+    </div>
     <div v-if="!editMode" class="result">{{result}}</div>
     <div>
       <el-input
@@ -15,8 +17,10 @@
       </el-input>
       <div v-if="badSimilarity" class="error">Ви не можете редагувати відповідь більше, ніж на 80%</div>
     </div>
-    <el-button v-if="result && !isListening && !editMode" class="record-response" @click="editMode = true">Редагувати</el-button>
-    <el-button v-if="editMode" class="record-response" @click="handleEditedResponse">Зберегти</el-button>
+    <div v-if="!taskFinished">
+      <el-button v-if="result && !isListening && !editMode" class="record-response" @click="editMode = true">Редагувати</el-button>
+      <el-button v-if="editMode" class="record-response" @click="handleEditedResponse">Зберегти</el-button>
+    </div>
   </el-row>
 </template>
 
@@ -41,6 +45,10 @@ export default {
     result: {
       type: String,
       default: ''
+    },
+    taskFinished: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -51,7 +59,6 @@ export default {
   },
   methods: {
     handleEditedResponse () {
-      console.log('here');
       this.badSimilarity = this.similarity < 0.8;
       if (!this.badSimilarity) {
         this.editMode = false;
@@ -62,8 +69,11 @@ export default {
     }
   },
   watch: {
-    result (result) {
-      this.editedResult = result;
+    result: {
+      handler (result) {
+        this.editedResult = result;
+      },
+      immediate: true
     }
   }
 };
