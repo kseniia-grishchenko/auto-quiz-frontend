@@ -35,6 +35,7 @@
           :question="activeQuestion"
           :isListening="speech.isListening"
           :result="speech.result || savedResponse"
+          :answer="activeQuestionAnswer"
           :taskFinished="finished"
           @record-response="recordResponse"
           @stop-recording="stopRecording"
@@ -59,8 +60,10 @@ export default {
     isListening: false,
     speech: null,
     startedAt: null,
-    finished: false,
-    duration: 0
+    finished: true,
+    duration: 0,
+    totalMark: 0,
+    userAnswers: []
   }),
   props: {
     courseId: null,
@@ -74,6 +77,9 @@ export default {
     activeQuestion () {
       return this.questions[this.activeQuestionIdx];
     },
+    activeQuestionAnswer () {
+      return this.userAnswers.find(({ question }) => question.id === this.activeQuestion.id) || null;
+    },
     savedResponse () {
       const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
       if (!sessionAnswers.length) return '';
@@ -83,7 +89,6 @@ export default {
     prevDisabled () {
       return this.activeQuestionIdx === 0;
     },
-
     nextDisabled () {
       return this.activeQuestionIdx === this.questions.length - 1;
     }
@@ -97,6 +102,8 @@ export default {
         this.startedAt = session.started_at;
         this.duration = session.task.quiz.max_duration;
         this.finished = !!session.finished_at;
+        this.totalMark = session.total_mark;
+        this.userAnswers = session.user_answers;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -147,7 +154,12 @@ export default {
     async finishTask () {
       try {
         const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
-        await postRequest(`/api/courses/${this.courseId}/tasks/${this.taskId}/finish/`, {
+        const {
+          data: {
+            total_mark: totalMark,
+            user_answers: userAnswers
+          }
+        } = await postRequest(`/api/courses/${this.courseId}/tasks/${this.taskId}/finish/`, {
           answers: sessionAnswers.map(({
             questionId,
             answer
@@ -156,7 +168,10 @@ export default {
             answer
           }))
         });
+        this.totalMark = totalMark;
+        this.userAnswers = userAnswers;
         this.finished = true;
+        this.activeQuestionIdx = 0;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',

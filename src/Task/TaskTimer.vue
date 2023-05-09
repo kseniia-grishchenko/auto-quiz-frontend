@@ -27,14 +27,13 @@ export default {
     },
     taskFinished: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   computed: {
     deadline () {
       return (new Date(this.startedAt)).getTime() + this.duration * 60 * 1e3;
     }
-
   },
   methods: {
     twoDigitRepresentation (value) {
@@ -45,11 +44,15 @@ export default {
       return strValue;
     },
 
+    reset () {
+      this.leftHours = this.twoDigitRepresentation(0);
+      this.leftMinutes = this.twoDigitRepresentation(0);
+      this.leftSeconds = this.twoDigitRepresentation(0);
+    },
+
     countdown () {
       if (this.deadline < Date.now()) {
-        this.leftHours = this.twoDigitRepresentation(0);
-        this.leftMinutes = this.twoDigitRepresentation(0);
-        this.leftSeconds = this.twoDigitRepresentation(0);
+        this.reset();
         return;
       }
       const leftSeconds = (this.deadline - Date.now()) / 1e3;
@@ -58,8 +61,24 @@ export default {
       this.leftSeconds = this.twoDigitRepresentation(Math.floor(leftSeconds % 60));
     }
   },
+  watch: {
+    taskFinished: {
+      handler (finished) {
+        if (finished) {
+          clearInterval(this.interval);
+          this.reset();
+          return;
+        }
+        if (!this.interval) {
+          this.interval = setInterval(this.countdown, 1);
+        }
+      },
+      immediate: true
+    }
+  },
   mounted () {
-    this.interval = setInterval(this.countdown, 1);
+    if (this.taskFinished) return;
+    if (!this.interval) this.interval = setInterval(this.countdown, 1);
   },
   beforeDestroy () {
     clearInterval(this.interval);

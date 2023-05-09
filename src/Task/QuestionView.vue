@@ -1,12 +1,12 @@
 <template>
   <el-row class="content">
-    <span>{{question.title}}</span>
+    <div class="title">{{question.title}}</div>
     <div v-if="!taskFinished">
       <el-button v-if="!isListening" type="primary" class="record-response" @click="$emit('record-response')">Записати відповідь</el-button>
       <el-button v-else type="primary" class="record-response" @click="$emit('stop-recording')">Готово</el-button>
     </div>
     <div v-if="!editMode" class="result">{{result}}</div>
-    <div>
+    <div v-if="!taskFinished">
       <el-input
         v-if="editMode"
         type="textarea"
@@ -21,6 +21,14 @@
       <el-button v-if="result && !isListening && !editMode" class="record-response" @click="editMode = true">Редагувати</el-button>
       <el-button v-if="editMode" class="record-response" @click="handleEditedResponse">Зберегти</el-button>
     </div>
+    <el-alert
+      v-if="answer"
+      type="info"
+      :closable="false"
+      class="explanation-block">
+      <div class="score">Ви заробили {{ answer.score }} балів</div>
+      <div>Пояснення: {{ answer.comment }}</div>
+    </el-alert>
   </el-row>
 </template>
 
@@ -45,6 +53,10 @@ export default {
     result: {
       type: String,
       default: ''
+    },
+    answer: {
+      type: Object,
+      default: null
     },
     taskFinished: {
       type: Boolean,
@@ -90,8 +102,16 @@ export default {
     border-color: red;
   }
 }
+
+.explanation-block {
+  margin-top: 60px;
+  * {
+    font-size: 18px;
+  }
+}
 </style>
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
 .content {
   display: flex;
   flex-direction: column;
@@ -104,7 +124,7 @@ export default {
   width: auto;
 }
 
-span {
+.title {
   font-size: 26px;
 }
 
@@ -124,5 +144,11 @@ span {
 
 .error {
   color: red;
+}
+
+.score {
+  color: $main-font;
+  font-weight: 500;
+  margin-bottom: 20px;
 }
 </style>
