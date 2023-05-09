@@ -42,7 +42,7 @@ export default {
     },
 
     countdown () {
-      if (this.deadline < Date.now) {
+      if (this.deadline < Date.now()) {
         this.leftHours = this.twoDigitRepresentation(0);
         this.leftMinutes = this.twoDigitRepresentation(0);
         this.leftSeconds = this.twoDigitRepresentation(0);
