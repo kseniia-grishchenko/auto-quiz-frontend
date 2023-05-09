@@ -12,20 +12,21 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header>
-          <task-timer
-            :duration="duration"
-            :startedAt="startedAt"
-            :lastQuestion="nextDisabled"
-            @finish-task="finishTask"></task-timer>
-          <question-pagination
-            v-if="activeQuestion"
-            :title="paginationTitle"
-            :prevDisabled="prevDisabled"
-            :nextDisabled="nextDisabled"
-            @prev="selectPreviousQuestion"
-            @next="selectNextQuestion"
-          ></question-pagination>
+      <el-header height="auto">
+        <task-timer
+          :duration="duration"
+          :startedAt="startedAt"
+          :lastQuestion="nextDisabled"
+          @finish-task="finishTask">
+        </task-timer>
+        <question-pagination
+          v-if="activeQuestion"
+          :title="paginationTitle"
+          :prevDisabled="prevDisabled"
+          :nextDisabled="nextDisabled"
+          @prev="selectPreviousQuestion"
+          @next="selectNextQuestion"
+        ></question-pagination>
       </el-header>
       <el-main>
         <question-view
@@ -33,6 +34,7 @@
           :question="activeQuestion"
           :isListening="speech.isListening"
           :result="speech.result || savedResponse"
+          :taskFinished="finished"
           @record-response="recordResponse"
           @stop-recording="stopRecording"
           @edited-response="editResponse"
@@ -44,7 +46,7 @@
 
 <script>
 import { useSpeechRecognition } from '@vueuse/core';
-import { getRequest } from '../api.js';
+import { getRequest, postRequest } from '../api.js';
 import QuestionView from './QuestionView.vue';
 import QuestionPagination from './QuestionPagination.vue';
 import TaskTimer from './TaskTimer.vue';
@@ -56,6 +58,7 @@ export default {
     isListening: false,
     speech: null,
     startedAt: null,
+    finished: false,
     duration: 0
   }),
   props: {
@@ -71,7 +74,10 @@ export default {
       return this.questions[this.activeQuestionIdx];
     },
     savedResponse () {
-      return localStorage.getItem(`${this.sessionId}-${this.activeQuestion.id}`);
+      const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
+      if (!sessionAnswers.length) return '';
+      const questionAnswer = sessionAnswers.find(item => item.questionId === this.activeQuestion.id) || '';
+      return questionAnswer.answer;
     },
     prevDisabled () {
       return this.activeQuestionIdx === 0;
@@ -82,13 +88,14 @@ export default {
     }
   },
   methods: {
-    async fetchTaskQuestions () {
+    async fetchTaskInfo () {
       try {
         const { data: session } =
         await getRequest(`/api/courses/${this.courseId}/tasks/${this.taskId}/sessions/${this.sessionId}`);
         this.questions = session.task.quiz.questions;
         this.startedAt = session.started_at;
         this.duration = session.task.quiz.max_duration;
+        this.finished = !!session.finished_at;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -113,19 +120,54 @@ export default {
 
     stopRecording () {
       this.speech.stop();
-      localStorage.setItem(`${this.sessionId}-${this.activeQuestion.id}`, this.speech.result);
+      const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
+      const questionToEdit = sessionAnswers.find(({ questionId }) => questionId === this.activeQuestion.id);
+      if (questionToEdit) {
+        questionToEdit.answer = this.speech.result;
+      } else {
+        sessionAnswers.push({
+          questionId: this.activeQuestion.id,
+          answer: this.speech.result
+        });
+      }
+      localStorage.setItem(`session-id-${this.sessionId}`, JSON.stringify(sessionAnswers));
     },
 
     editResponse (editedResult) {
       this.speech.result = editedResult;
-      localStorage.setItem(`${this.sessionId}-${this.activeQuestion.id}`, this.speech.result);
+      const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
+      const questionToEdit = sessionAnswers.find(({ questionId }) => questionId === this.activeQuestion.id);
+      questionToEdit.answer = editedResult;
+      localStorage.setItem(`session-id-${this.sessionId}`, JSON.stringify(sessionAnswers));
+    },
+
+    async finishTask () {
+      try {
+        const sessionAnswers = JSON.parse(localStorage.getItem(`session-id-${this.sessionId}`)) || [];
+        await postRequest(`/api/courses/${this.courseId}/tasks/${this.taskId}/finish/`, {
+          answers: sessionAnswers.map(({
+            questionId,
+            answer
+          }) => ({
+            question_id: questionId,
+            answer
+          }))
+        });
+        this.finished = true;
+      } catch (err) {
+        this.$notify.error({
+          title: 'Помилка',
+          message: JSON.stringify(err.response.data),
+          showClose: false
+        });
+      }
     }
   },
   watch: {
     sessionId: {
       handler (id) {
         if (!id) return;
-        this.fetchTaskQuestions();
+        this.fetchTaskInfo();
 
         this.speech = useSpeechRecognition({
           lang: 'uk-UA',
