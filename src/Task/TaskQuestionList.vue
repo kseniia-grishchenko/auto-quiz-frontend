@@ -13,14 +13,19 @@
     </el-aside>
     <el-container>
       <el-header>
-         <question-pagination
+          <task-timer
+            :duration="duration"
+            :startedAt="startedAt"
+            :lastQuestion="nextDisabled"
+            @finish-task="finishTask"></task-timer>
+          <question-pagination
             v-if="activeQuestion"
             :title="paginationTitle"
             :prevDisabled="prevDisabled"
             :nextDisabled="nextDisabled"
             @prev="selectPreviousQuestion"
             @next="selectNextQuestion"
-         ></question-pagination>
+          ></question-pagination>
       </el-header>
       <el-main>
         <question-view
@@ -42,13 +47,16 @@ import { useSpeechRecognition } from '@vueuse/core';
 import { getRequest } from '../api.js';
 import QuestionView from './QuestionView.vue';
 import QuestionPagination from './QuestionPagination.vue';
+import TaskTimer from './TaskTimer.vue';
 
 export default {
   data: () => ({
     activeQuestionIdx: 0,
     questions: [],
     isListening: false,
-    speech: null
+    speech: null,
+    startedAt: null,
+    duration: 0
   }),
   props: {
     courseId: null,
@@ -79,6 +87,8 @@ export default {
         const { data: session } =
         await getRequest(`/api/courses/${this.courseId}/tasks/${this.taskId}/sessions/${this.sessionId}`);
         this.questions = session.task.quiz.questions;
+        this.startedAt = session.started_at;
+        this.duration = session.task.quiz.max_duration;
       } catch (err) {
         this.$notify.error({
           title: 'Помилка',
@@ -127,7 +137,8 @@ export default {
 
   components: {
     QuestionView,
-    QuestionPagination
+    QuestionPagination,
+    TaskTimer
   }
 };
 </script>
