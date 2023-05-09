@@ -27,9 +27,10 @@
           v-if="activeQuestion"
           :question="activeQuestion"
           :isListening="speech.isListening"
-          :result="speech.result"
+          :result="speech.result || savedResponse"
           @record-response="recordResponse"
           @stop-recording="stopRecording"
+          @edited-response="editResponse"
         ></question-view>
       </el-main>
     </el-container>
@@ -60,6 +61,9 @@ export default {
     },
     activeQuestion () {
       return this.questions[this.activeQuestionIdx];
+    },
+    savedResponse () {
+      return localStorage.getItem(`${this.sessionId}-${this.activeQuestion.id}`);
     },
     prevDisabled () {
       return this.activeQuestionIdx === 0;
@@ -99,6 +103,12 @@ export default {
 
     stopRecording () {
       this.speech.stop();
+      localStorage.setItem(`${this.sessionId}-${this.activeQuestion.id}`, this.speech.result);
+    },
+
+    editResponse (editedResult) {
+      this.speech.result = editedResult;
+      localStorage.setItem(`${this.sessionId}-${this.activeQuestion.id}`, this.speech.result);
     }
   },
   watch: {

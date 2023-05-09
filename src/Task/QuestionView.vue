@@ -13,7 +13,7 @@
         class="edited-input"
         ref="input">
       </el-input>
-      <div class="error"></div>
+      <div v-if="badSimilarity" class="error">Ви не можете редагувати відповідь більше, ніж на 80%</div>
     </div>
     <el-button v-if="result && !isListening && !editMode" class="record-response" @click="editMode = true">Редагувати</el-button>
     <el-button v-if="editMode" class="record-response" @click="handleEditedResponse">Зберегти</el-button>
@@ -26,7 +26,8 @@ import { distance } from 'fastest-levenshtein';
 export default {
   data: () => ({
     editedResult: '',
-    editMode: false
+    editMode: false,
+    badSimilarity: false
   }),
   props: {
     question: {
@@ -50,9 +51,14 @@ export default {
   },
   methods: {
     handleEditedResponse () {
-      console.log();
-      this.$refs.input.$el.classList.add('invalid');
       console.log('here');
+      this.badSimilarity = this.similarity < 0.8;
+      if (!this.badSimilarity) {
+        this.editMode = false;
+        this.$emit('edited-response', this.editedResult);
+        return;
+      }
+      this.$refs.input.$el.classList.add('invalid');
     }
   },
   watch: {
@@ -99,5 +105,9 @@ span {
 .edited-input {
   margin-top: 60px;
   font-size: 20px;
+}
+
+.error {
+  color: red;
 }
 </style>
