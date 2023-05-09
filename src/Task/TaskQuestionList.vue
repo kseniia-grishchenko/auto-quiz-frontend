@@ -17,6 +17,7 @@
           :duration="duration"
           :startedAt="startedAt"
           :lastQuestion="nextDisabled"
+          :taskFinished="finished"
           @finish-task="finishTask">
         </task-timer>
         <question-pagination

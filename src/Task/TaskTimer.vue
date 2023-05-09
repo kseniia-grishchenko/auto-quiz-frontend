@@ -1,7 +1,7 @@
 <template>
   <div class="timer">
     <div>{{ leftHours }} : {{ leftMinutes }} : {{ leftSeconds }}</div>
-    <el-button v-if="lastQuestion" type="danger" class="finish-btn" @click="$emit('finish-task')">Завершити тест</el-button>
+    <el-button v-if="lastQuestion && !taskFinished" type="danger" class="finish-btn" @click="$emit('finish-task')">Завершити тест</el-button>
   </div>
 </template>
 
@@ -22,6 +22,10 @@ export default {
       default: ''
     },
     lastQuestion: {
+      type: Boolean,
+      default: false
+    },
+    taskFinished: {
       type: Boolean,
       default: false
     }
