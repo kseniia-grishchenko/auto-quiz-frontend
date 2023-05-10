@@ -26,7 +26,7 @@
       type="info"
       :closable="false"
       class="explanation-block">
-      <div class="score">Ви заробили {{ answer.score }} балів</div>
+      <div class="score">Ви заробили {{ answer.mark }} балів</div>
       <div>Пояснення: {{ answer.comment }}</div>
     </el-alert>
   </el-row>

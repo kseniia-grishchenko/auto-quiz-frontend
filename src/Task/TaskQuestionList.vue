@@ -2,12 +2,16 @@
   <el-container>
     <el-aside width="300px">
       <el-menu :default-active="String(activeQuestionIdx)" class="question-list">
+        <div class="total-mark" v-if="finished">Загалом: {{ totalMark }} балів</div>
         <el-menu-item
-          v-for="(_, index) in questions"
+          v-for="(question, index) in questions"
           :key="index"
           :index="String(index)"
           @click="activeQuestionIdx = index">
-            <span>Питання {{index + 1}}</span>
+            <div class="title">
+                <span>Питання {{index + 1}}</span>
+                <span>{{ questionMark(question.id) }}/{{ question.value }}</span>
+            </div>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -188,6 +192,11 @@ export default {
         lang: 'uk-UA',
         continuous: true
       });
+    },
+
+    questionMark (id) {
+      const question = this.userAnswers.find(({ question }) => question.id === id);
+      return question.mark;
     }
   },
   watch: {
@@ -219,5 +228,17 @@ export default {
 <style lang="scss" scoped>
 .question-list {
   height: 100%;
+}
+
+.total-mark {
+  font-size: 18px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
