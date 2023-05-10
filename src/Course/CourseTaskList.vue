@@ -24,6 +24,11 @@
         <el-button
           class="task-action"
           size="mini"
+          type="primary"
+          @click.stop="redirectToAnswersPage(scope.row)">Переглянути відповіді</el-button>
+        <el-button
+          class="task-action"
+          size="mini"
           @click.stop="taskToEdit = {...scope.row}">Редагувати</el-button>
         <el-button
           class="task-action"
@@ -124,6 +129,10 @@ export default {
   methods: {
     handleTaskRedirect (task) {
       location.hash = `#/courses/${this.course.id}/task/${task.id}`;
+    },
+
+    redirectToAnswersPage (task) {
+      location.hash = `#/courses/${this.course.id}/task/${task.id}/answers`;
     },
 
     async createTask () {

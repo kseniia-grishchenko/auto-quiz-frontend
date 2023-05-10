@@ -17,6 +17,7 @@
           <join-course></join-course>
           <user-profile v-if="user" :user="user" @refresh-user="fetchUser"></user-profile>
           <task-view v-if="user" :user="user"></task-view>
+          <task-answers v-if="user" :user="user"></task-answers>
         </el-main>
       </el-container>
       <subject-view v-if="user && !showDefaultHeader" @sign-out="logOut" :user="user"></subject-view>
@@ -46,6 +47,7 @@ import JoinSubject from './JoinSubject/JoinSubject.vue';
 import JoinCourse from './JoinCourse/JoinCourse.vue';
 import UserProfile from './UserProfile/UserProfile.vue';
 import TaskView from './Task/TaskView.vue';
+import TaskAnswers from './Task/TaskAnswers.vue';
 
 export default {
   data: () => ({
@@ -148,7 +150,8 @@ export default {
     JoinSubject,
     JoinCourse,
     UserProfile,
-    TaskView
+    TaskView,
+    TaskAnswers
   }
 };
 </script>

@@ -10,7 +10,7 @@
           @click="activeQuestionIdx = index">
             <div class="title">
                 <span>Питання {{index + 1}}</span>
-                <span>{{ questionMark(question.id) }}/{{ question.value }}</span>
+                <span v-if="finished">{{ questionMark(question.id) }}/{{ question.value }}</span>
             </div>
         </el-menu-item>
       </el-menu>

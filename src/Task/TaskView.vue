@@ -6,12 +6,12 @@
       class="start-btn"
       @click="startSession"
     >Розпочати тест</el-button>
-      <task-question-list
-        v-else
-        :courseId="courseId"
-        :sessionId="sessionId"
-        :taskId="taskId">
-      </task-question-list>
+    <task-question-list
+      v-else
+      :courseId="courseId"
+      :sessionId="sessionId"
+      :taskId="taskId">
+    </task-question-list>
   </el-row>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     hashHandler () {
-      const match = location.hash.match(/#\/courses\/(\d+)\/task\/(\d+)/);
+      const match = location.hash.match(/#\/courses\/(\d+)\/task\/(\d+)$/);
       this.active = !!match;
       if (!match) return;
       this.courseId = Number(match[1]);
