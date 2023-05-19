@@ -59,7 +59,7 @@ export default {
   methods: {
     hashHandler () {
       this.hash = location.hash;
-      const match = location.hash.match(/#\/courses\/(\d+)$/);
+      const match = location.hash.match(/#\/courses\/(\d+)($|\?info=true)/);
       this.active = !!match;
       if (!match) return;
       this.id = Number(match[1]);
