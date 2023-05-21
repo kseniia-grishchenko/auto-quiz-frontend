@@ -20,19 +20,6 @@
           <el-input placeholder="Введіть пароль" v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
-          <span>Оберіть вашу роль</span>
-          <div class="role-btns">
-            <el-button
-              :class="{'active': form.isTeacher === false}"
-              @click="form.isTeacher = false"
-            >Учень</el-button>
-            <el-button
-              :class="{'active': form.isTeacher === true}"
-              @click="form.isTeacher = true"
-            >Вчитель</el-button>
-          </div>
-        </el-form-item>
-        <el-form-item>
           <el-button type="primary" class="action" @click="onSubmit">Зареєструватись</el-button>
         </el-form-item>
       </el-form>
@@ -58,8 +45,7 @@ export default {
         email: '',
         firstName: '',
         lastName: '',
-        password: '',
-        isTeacher: null
+        password: ''
       },
       rules: {
         email: [
@@ -90,8 +76,7 @@ export default {
           email: this.form.email,
           password: this.form.password,
           first_name: this.form.firstName,
-          last_name: this.form.lastName,
-          is_teacher: this.form.isTeacher || false
+          last_name: this.form.lastName
         });
         this.$notify({
           title: 'Успіх',

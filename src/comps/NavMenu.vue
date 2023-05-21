@@ -9,12 +9,12 @@
         <span slot="title">Головне меню</span>
       </el-menu-item>
       <el-menu-item index="#/" @click="redirectTo('#/')">
-        <i class="el-icon-folder"></i>
-        <span slot="title">Предмети</span>
-      </el-menu-item>
-      <el-menu-item index="#/courses" @click="redirectTo('#/courses')">
         <i class="el-icon-notebook-1"></i>
         <span slot="title">Курси</span>
+      </el-menu-item>
+      <el-menu-item index="#/subjects" @click="redirectTo('#/subjects')">
+        <i class="el-icon-folder"></i>
+        <span slot="title">Предмети</span>
       </el-menu-item>
       <div class="collapse-btn" @click="collapse = !collapse">
         <i v-if="!collapse" class="el-icon-d-arrow-left"></i>

@@ -27,7 +27,7 @@
     </div>
     <el-dialog
       :visible.sync="modalOpened"
-      title="Створити"
+      title="Створити курс"
       top="30vh">
       <el-form ref="form" :model="form" class="input-section">
         <h3>Назва курсу</h3>
@@ -54,7 +54,7 @@
       :visible="!!createdCourse"
       top="30vh"
       @close="createdCourse = null">
-      <invitation-link-card :invitationLink="createdCourse.invitation_token">
+      <invitation-link-card :invitationLink="invitationLink">
       </invitation-link-card>
     </el-dialog>
     <el-dialog
@@ -106,6 +106,11 @@ export default {
       '#6A4C93'
     ]
   }),
+  computed: {
+    invitationLink () {
+      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.createdCourse.invitation_token}`;
+    }
+  },
   methods: {
     redirectToCourse (id) {
       location.hash = `#/courses/${id}`;
@@ -148,7 +153,7 @@ export default {
     },
 
     hashHandler () {
-      this.active = !!location.hash.match('courses$');
+      this.active = !!location.hash.match(/#\/$|courses$/);
     },
 
     async fetchCourses () {

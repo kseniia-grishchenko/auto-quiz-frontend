@@ -17,7 +17,7 @@
     <div>
       <span>Запрошувальне посилання:</span>
       <div class="action-section">
-        <span>{{course.invitation_token}}</span>
+        <span>{{invitationLink}}</span>
         <i class="el-icon-copy-document" @click="copyToken"></i>
       </div>
     </div>
@@ -44,6 +44,11 @@ export default {
   }),
   props: {
     course: Object
+  },
+  computed: {
+    invitationLink () {
+      return `${import.meta.env.VITE_APP_URL}/#/join-subject/${this.course.invitation_token}`;
+    }
   },
   methods: {
     async copyToken () {

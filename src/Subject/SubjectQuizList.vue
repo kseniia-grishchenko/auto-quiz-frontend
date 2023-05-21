@@ -2,7 +2,7 @@
   <div class="content">
     <el-row>
       <create-btn
-        title="квіз"
+        title="тест"
         @click="createModalOpened = true"></create-btn>
     </el-row>
     <el-table
@@ -34,7 +34,7 @@
     </el-table-column>
     </el-table>
     <div v-else class="no-quizzes">
-      В цьому курсі ще немає квізів
+      В цьому курсі ще немає тестів
     </div>
     <el-dialog :visible.sync="createModalOpened" top="30vh">
       <el-form ref="form" :model="form" class="input-section">

@@ -55,7 +55,7 @@
             placeholder="Оберіть дату і час">
           </el-date-picker>
         </el-form-item>
-        <h3>Квіз</h3>
+        <h3>Тест</h3>
         <el-form-item>
           <el-radio-group v-model="form.quiz" class="subject-choice">
             <el-radio

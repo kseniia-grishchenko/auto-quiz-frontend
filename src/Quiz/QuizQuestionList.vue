@@ -33,7 +33,7 @@
     </el-table-column>
     </el-table>
     <div v-else class="no-questions">
-      В цьому квізі ще немає питань
+      В цьому тесті ще немає питань
     </div>
     <create-question-modal
       :visible="createModalOpened"
@@ -153,6 +153,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.question-name div {
+  white-space: nowrap;
+}
+</style>
 
 <style lang="scss" scoped>
 .action {

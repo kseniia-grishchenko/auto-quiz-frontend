@@ -36,7 +36,7 @@ export default {
     navItems () {
       return [
         {
-          title: 'Квізи',
+          title: 'Тести',
           link: `#/subjects/${this.id}`
         },
         {
